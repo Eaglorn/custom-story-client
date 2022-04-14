@@ -1,8 +1,8 @@
 {
-  "name": "survivalforest",
+  "name": "survivalforestclient",
   "version": "0.0.1",
   "description": "RPG",
-  "productName": "Survival Forest",
+  "productName": "Survival Forest Client",
   "author": "Eaglorn <lexus1.45@mail.ru>",
   "private": true,
   "scripts": {
