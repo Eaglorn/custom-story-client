@@ -33,8 +33,8 @@ export default defineComponent({
       console.log(arg);
     });
 
-    //$router.push('UserSignInUp');
-    $router.push("UserRegistrationCodeWrite");
+    $router.push("UserSignInUp");
+    //$router.push("UserRegistrationCodeWrite");
   },
 });
 </script>
