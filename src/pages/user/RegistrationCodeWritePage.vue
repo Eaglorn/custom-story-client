@@ -45,6 +45,8 @@ export default {
     // const globalStore = useGlobalStore();
     // const userStore = useUserStore();
 
+    // TODO Сделать запрос подтверждения введённого кода регистрации
+
     const code = ref("");
 
     return { code };
