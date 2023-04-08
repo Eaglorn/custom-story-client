@@ -15,10 +15,17 @@
           <q-card-section>
             <q-input
               class="form-input"
-              v-model="code"
+              v-model="formCode"
               type="text"
               outlined
               label="Введите код полученный в сообщении"
+            />
+            <q-btn
+              class="form-button shadow-2"
+              style="width: 300px"
+              color="primary"
+              label="Завершить регистрацию"
+              @click="endRegistrtion"
             />
           </q-card-section>
         </q-card>
@@ -36,20 +43,59 @@
 
 <script>
 import { ref } from "vue";
-// import { useUserStore } from 'stores/user';
-// import { useGlobalStore } from 'stores/global';
+import { Loading, Notify, Cookies } from "quasar";
+import { api } from "boot/axios";
+import { useRouter } from "vue-router";
+import { useUserStore } from "stores/user";
+import { useGlobalStore } from "stores/global";
 
 export default {
   name: "UserRegistration",
   setup() {
-    // const globalStore = useGlobalStore();
-    // const userStore = useUserStore();
-
-    // TODO Сделать запрос подтверждения введённого кода регистрации
+    const globalStore = useGlobalStore();
+    const userStore = useUserStore();
 
     const code = ref("");
 
-    return { code };
+    // TODO Сделать запрос подтверждения введённого кода регистрации
+    const endRegistration = function () {
+      Loading.show();
+      api({
+        method: "post",
+        url: globalStore.getAjaxUri("user/RegistrationCheckEmail"),
+        data: {
+          email: userStore.email,
+          code: code,
+        },
+        timeout: 10000,
+        responseType: "json",
+      })
+        .then((response) => {
+          if (response.data.success === true) {
+            $router.push("UserRegistrationCreateHero");
+          } else {
+            Notify.create({
+              progress: true,
+              color: "negative",
+              position: "top",
+              message: "Не верно введён код",
+              icon: "report_problem",
+            });
+          }
+        })
+        .catch(function () {
+          Loading.hide();
+          Notify.create({
+            color: "negative",
+            position: "top",
+            message:
+              "Нет соединения с сервером. Попробуйте отправить код ещё раз",
+            icon: "report_problem",
+          });
+        });
+    };
+
+    return { endRegistration, formCode };
   },
 };
 </script>
