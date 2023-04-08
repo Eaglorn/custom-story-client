@@ -11,7 +11,7 @@
               :rules="[
                 (val) => !!val || '* Необходимо заполнить',
                 (val) => val.length <= 40 || 'Не более 40 символов',
-                () => isValidEmail(),
+                () => validator.isEmail(val),
               ]"
               outlined
               label="Электронный почтовый ящик *"
@@ -22,7 +22,21 @@
               :rules="[
                 (val) => !!val || '* Необходимо заполнить',
                 (val) => val.length <= 16 || 'Не более 16 символов',
-                () => isValidPassword(),
+                () =>
+                  validator.isStrongPassword(val, {
+                    minLength: 8,
+                    minLowercase: 1,
+                    minUppercase: 1,
+                    minNumbers: 1,
+                    minSymbols: 1,
+                    returnScore: false,
+                    pointsPerUnique: 1,
+                    pointsPerRepeat: 0.5,
+                    pointsForContainingLower: 10,
+                    pointsForContainingUpper: 10,
+                    pointsForContainingNumber: 10,
+                    pointsForContainingSymbol: 10,
+                  }),
               ]"
               outlined
               label="Пароль *"
@@ -108,6 +122,7 @@
 import { defineComponent, ref } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
+import { validator } from "boot/validator";
 import VueClientRecaptcha from "vue-client-recaptcha";
 import { useRouter } from "vue-router";
 
@@ -127,15 +142,6 @@ export default defineComponent({
     var formEmail = ref("");
     var formPassword = ref("");
     const isPwd = ref(true);
-
-    const isValidEmail = function () {
-      const emailPattern =
-        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      return (
-        emailPattern.test(formEmail.value) ||
-        "Не верно введён электронный почтовый ящик"
-      );
-    };
 
     const isValidPassword = function () {
       const passwordPattern =
@@ -278,7 +284,6 @@ export default defineComponent({
       formEmail,
       formPassword,
       isPwd,
-      isValidEmail,
       isValidPassword,
       recaptchaText,
       recaptchaValue,
@@ -287,6 +292,7 @@ export default defineComponent({
       checkValidCaptcha,
       onAuth,
       onReg,
+      validator,
     };
   },
 });

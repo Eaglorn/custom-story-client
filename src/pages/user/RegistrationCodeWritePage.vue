@@ -57,7 +57,6 @@ export default {
 
     const code = ref("");
 
-    // TODO Сделать запрос подтверждения введённого кода регистрации
     const endRegistration = function () {
       Loading.show();
       api({
