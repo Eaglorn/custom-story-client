@@ -42,6 +42,7 @@
 </style>
 
 <script>
+// TODO: Добавить перевод
 import { ref } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";

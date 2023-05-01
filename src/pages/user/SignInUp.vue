@@ -119,6 +119,7 @@
 </style>
 
 <script>
+// TODO: Добавить перевод
 import { defineComponent, ref } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
