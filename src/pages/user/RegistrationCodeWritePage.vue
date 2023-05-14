@@ -42,7 +42,6 @@
 </style>
 
 <script>
-// TODO: Добавить перевод
 import { ref } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
@@ -56,23 +55,30 @@ export default {
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 
-    const code = ref("");
+    const formCode = ref("");
 
     const endRegistration = function () {
       Loading.show();
       api({
         method: "post",
-        url: globalStore.getAjaxUri("user/RegistrationCheckEmail"),
+        url: globalStore.getAjaxUri("user/registration/check/email"),
         data: {
           email: userStore.email,
-          code: code,
+          code: formCode.value,
         },
         timeout: 10000,
         responseType: "json",
       })
         .then((response) => {
           if (response.data.success === true) {
-            $router.push("UserRegistrationCreateHero");
+            Notify.create({
+              progress: true,
+              color: "green",
+              position: "top",
+              message: "Верно введён код",
+              icon: "report_problem",
+            });
+            //$router.push("UserRegistrationCreateHero");
           } else {
             Notify.create({
               progress: true,
