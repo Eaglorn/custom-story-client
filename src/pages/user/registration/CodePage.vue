@@ -25,7 +25,7 @@
               style="width: 300px"
               color="primary"
               label="Завершить регистрацию"
-              @click="endRegistrtion"
+              @click="endRegistration"
             />
           </q-card-section>
         </q-card>
@@ -50,8 +50,9 @@ import { useUserStore } from "stores/user";
 import { useGlobalStore } from "stores/global";
 
 export default {
-  name: "UserRegistration",
+  name: "UserRegistrationCodePage",
   setup() {
+    const $router = useRouter();
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 
@@ -59,9 +60,10 @@ export default {
 
     const endRegistration = function () {
       Loading.show();
+
       api({
         method: "post",
-        url: globalStore.getAjaxUri("user/registration/check/email"),
+        url: globalStore.getAjaxUri("user/registration/check"),
         data: {
           email: userStore.email,
           code: formCode.value,
@@ -70,15 +72,9 @@ export default {
         responseType: "json",
       })
         .then((response) => {
+          Loading.hide();
           if (response.data.success === true) {
-            Notify.create({
-              progress: true,
-              color: "green",
-              position: "top",
-              message: "Верно введён код",
-              icon: "report_problem",
-            });
-            //$router.push("UserRegistrationCreateHero");
+            $router.push("UserRegistrationHero");
           } else {
             Notify.create({
               progress: true,

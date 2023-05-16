@@ -34,7 +34,6 @@ export default defineComponent({
     });
 
     $router.push("UserSignInUp");
-    //$router.push("UserRegistrationCodeWrite");
   },
 });
 </script>

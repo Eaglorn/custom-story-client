@@ -105,6 +105,7 @@
 </style>
 
 <script>
+// TODO: Доделать перенаправление на страницу ввода кода
 import { defineComponent, ref } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
@@ -115,7 +116,7 @@ import { useGlobalStore } from "stores/global";
 import { useUserStore } from "stores/user";
 
 export default defineComponent({
-  name: "UserSignInUp",
+  name: "UserRegistrationSignInUpPage",
   components: {
     VueClientRecaptcha,
   },
@@ -182,7 +183,7 @@ export default defineComponent({
               auth: true,
               type: response.data.type,
             });
-            Cookies.set("email", formEmail.value, { expires: 3, secure: true });
+            Cookies.set("email", formEmail.value, { expires: 1, secure: true });
             Cookies.set("password", formPassword.value, {
               expires: 3,
               secure: true,
@@ -248,8 +249,8 @@ export default defineComponent({
             });
           } else {
             if (response.data.success === true) {
-              userStore.email = formEmail;
-              $router.push("UserRegistrationCodeWrite");
+              userStore.email = formEmail.value;
+              $router.push("UserRegistrationCode");
             } else {
               Notify.create({
                 progress: true,
