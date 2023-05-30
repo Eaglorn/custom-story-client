@@ -22,15 +22,15 @@
     "validator": "^13.9.0",
     "vue": "^3.3.4",
     "vue-client-recaptcha": "^1.1.1",
-    "vue-router": "^4.2.1"
+    "vue-router": "^4.2.2"
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.4.3",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-vue": "^9.13.0",
-    "postcss": "^8.4.23",
+    "eslint-plugin-vue": "^9.14.1",
+    "postcss": "^8.4.24",
     "prettier": "^2.8.8"
   },
   "engines": {
