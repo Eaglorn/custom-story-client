@@ -74,7 +74,7 @@ export default {
         .then((response) => {
           Loading.hide();
           if (response.data.success === true) {
-            $router.push("UserRegistrationHero");
+            $router.push("UserRegistrationTimeHistory");
           } else {
             Notify.create({
               progress: true,

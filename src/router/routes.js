@@ -13,6 +13,11 @@ const routes = [
         component: () => import("pages/user/registration/CodePage.vue"),
       },
       {
+        path: "UserRegistrationTimeHistory",
+        component: () =>
+          import("pages/user/registration/UserRegistrationTimeHistory.vue"),
+      },
+      {
         path: "UserRegistrationHero",
         component: () => import("pages/user/registration/HeroPage.vue"),
       },
