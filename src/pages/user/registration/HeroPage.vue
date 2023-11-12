@@ -9,7 +9,6 @@
 <style scoped lang="sass"></style>
 
 <script>
-// TODO: Сделать страницу создания персонажа
 import { ref } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
