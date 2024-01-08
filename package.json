@@ -15,12 +15,12 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.9",
-    "axios": "^1.6.3",
+    "axios": "^1.6.5",
     "pinia": "^2.1.7",
     "quasar": "^2.14.2",
-    "socket.io-client": "4.7.2",
+    "socket.io-client": "4.7.3",
     "validator": "^13.11.0",
-    "vue": "^3.4.0",
+    "vue": "^3.4.5",
     "vue-client-recaptcha": "^1.1.4",
     "vue-router": "^4.2.5"
   },
@@ -30,7 +30,7 @@
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-vue": "^9.19.2",
-    "postcss": "^8.4.32",
+    "postcss": "^8.4.33",
     "prettier": "^3.1.1"
   },
   "engines": {
