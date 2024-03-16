@@ -14,8 +14,7 @@ const routes = [
       },
       {
         path: "UserRegistrationTimeHistory",
-        component: () =>
-          import("pages/user/registration/UserRegistrationTimeHistory.vue"),
+        component: () => import("pages/user/registration/TimeHistory.vue"),
       },
       {
         path: "UserRegistrationHero",

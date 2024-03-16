@@ -15,10 +15,10 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.9",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "pinia": "^2.1.7",
-    "quasar": "^2.15.0",
-    "socket.io-client": "4.7.4",
+    "quasar": "^2.15.1",
+    "socket.io-client": "4.7.5",
     "validator": "^13.11.0",
     "vue": "^3.4.21",
     "vue-client-recaptcha": "^1.1.4",
@@ -34,7 +34,7 @@
     "prettier": "^3.2.5"
   },
   "engines": {
-    "node": "^18 || ^16 || ^14.19",
+    "node": "^20 || ^18",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   }
