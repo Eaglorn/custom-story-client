@@ -122,8 +122,6 @@
   </q-page>
 </template>
 
-<style scoped lang="sass"></style>
-
 <script>
 import { ref } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
@@ -135,10 +133,17 @@ import { useGlobalStore } from "stores/global";
 export default {
   name: "UserRegistrationHeroPage",
   setup() {
+    const $router = useRouter();
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 
-    return {};
+    const createHero = function () {
+      $router.push("UserRegistrationCreateHero");
+    };
+
+    return { createHero };
   },
 };
 </script>
+
+<style scoped lang="sass"></style>

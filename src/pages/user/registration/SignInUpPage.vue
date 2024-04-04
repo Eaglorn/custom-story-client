@@ -5,8 +5,8 @@
         <q-card>
           <q-card-section>
             <q-input
-              class="form-input"
               v-model="formEmail"
+              class="form-input"
               type="email"
               :rules="[
                 (val) => !!val || '* Необходимо заполнить',
@@ -17,8 +17,8 @@
               label="Электронный почтовый ящик *"
             />
             <q-input
-              class="form-input"
               v-model="formPassword"
+              class="form-input"
               :rules="[
                 (val) => !!val || '* Необходимо заполнить',
                 (val) => val.length <= 16 || 'Не более 16 символов',
@@ -28,50 +28,14 @@
               label="Пароль *"
               :type="isPwd ? 'password' : 'text'"
             >
-              <template v-slot:append>
+              <template #append>
                 <i
                   class="fa-solid"
-                  v-bind:class="{ 'fa-eye': isPwd, 'fa-eye-slash': !isPwd }"
+                  :class="{ 'fa-eye': isPwd, 'fa-eye-slash': !isPwd }"
                   @click="isPwd = !isPwd"
                 ></i>
               </template>
             </q-input>
-            <VueClientRecaptcha
-              class="form-recaptcha"
-              :value="recaptchaText"
-              :count="6"
-              @getCode="getCaptchaCode"
-              @isValid="checkValidCaptcha"
-            >
-              <template #icon>
-                <q-btn
-                  round
-                  color="brown-5"
-                  icon="fa-solid fa-arrows-rotate fa-2x fa-spin"
-                  style="--fa-animation-duration: 25s"
-                >
-                  <q-tooltip
-                    class="bg-indigo"
-                    :offset="[10, 10]"
-                    style="font-size: 16px !important"
-                  >
-                    Обновить Капчу
-                  </q-tooltip>
-                </q-btn>
-              </template>
-            </VueClientRecaptcha>
-            <q-input
-              class="form-input"
-              v-model="recaptchaText"
-              type="text"
-              :rules="[
-                (val) => !!val || '* Необходимо заполнить',
-                (val) => val.length <= 6 || 'Не более 6 символов',
-                (val) => val == recaptchaValue || 'Неправильно набран текст',
-              ]"
-              outlined
-              label="Введите текст указанный на картинке"
-            />
             <q-btn
               class="form-button shadow-2"
               style="width: 300px"
@@ -93,22 +57,10 @@
   </q-page>
 </template>
 
-<style scoped lang="sass">
-.form-input, .form-button
-  margin-top: 10px
-  margin-bottom: 10px
-
-.form-recaptcha
-  display: grid
-  grid-template-columns: 50px 0px
-  margin-top: 40px
-</style>
-
 <script>
 import { defineComponent, ref } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
-import VueClientRecaptcha from "vue-client-recaptcha";
 import { useRouter } from "vue-router";
 
 import { useGlobalStore } from "stores/global";
@@ -116,16 +68,13 @@ import { useUserStore } from "stores/user";
 
 export default defineComponent({
   name: "UserRegistrationSignInUpPage",
-  components: {
-    VueClientRecaptcha,
-  },
   setup() {
     const $router = useRouter();
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 
-    var formEmail = ref("");
-    var formPassword = ref("");
+    let formEmail = ref("");
+    let formPassword = ref("");
     const isPwd = ref(true);
 
     const isValidEmail = function () {
@@ -148,18 +97,6 @@ export default defineComponent({
           "как минимум из одной цифры, " +
           "хотя бы один специальный символ."
       );
-    };
-
-    const recaptchaText = ref("");
-    const recaptchaValue = ref("");
-    const recaptchaResult = ref(false);
-
-    const getCaptchaCode = (value) => {
-      recaptchaText.value = "";
-      recaptchaValue.value = value;
-    };
-    const checkValidCaptcha = (value) => {
-      recaptchaResult.value = value;
     };
 
     const onAuth = function () {
@@ -246,19 +183,17 @@ export default defineComponent({
                 "Введённый электронный почтовый ящик находится на этапе регистрации. Попробуйте зарегистрироваться под другим электронным почтовым ящиком. Если это вы регистрировали введённый электронный почтовый ящик, попробуйте заного выполнить регистрацию через 60 минут.",
               icon: "report_problem",
             });
+          } else if (response.data.success === true) {
+            userStore.email = formEmail.value;
+            $router.push("UserRegistrationCode");
           } else {
-            if (response.data.success === true) {
-              userStore.email = formEmail.value;
-              $router.push("UserRegistrationCode");
-            } else {
-              Notify.create({
-                progress: true,
-                color: "negative",
-                position: "top",
-                message: "Введённый электронный почтовый ящик занят",
-                icon: "report_problem",
-              });
-            }
+            Notify.create({
+              progress: true,
+              color: "negative",
+              position: "top",
+              message: "Введённый электронный почтовый ящик занят",
+              icon: "report_problem",
+            });
           }
           Loading.hide();
         })
@@ -280,14 +215,20 @@ export default defineComponent({
       isPwd,
       isValidEmail,
       isValidPassword,
-      recaptchaText,
-      recaptchaValue,
-      recaptchaResult,
-      getCaptchaCode,
-      checkValidCaptcha,
       onAuth,
       onReg,
     };
   },
 });
 </script>
+
+<style scoped lang="sass">
+.form-input, .form-button
+  margin-top: 10px
+  margin-bottom: 10px
+
+.form-recaptcha
+  display: grid
+  grid-template-columns: 50px 0px
+  margin-top: 40px
+</style>
