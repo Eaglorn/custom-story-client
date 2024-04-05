@@ -14,8 +14,8 @@
         <q-card style="width: 100%; max-width: 350px">
           <q-card-section>
             <q-input
-              v-model="formCode"
               class="form-input"
+              v-model="formCode"
               type="text"
               outlined
               label="Введите код полученный в сообщении"
@@ -34,9 +34,16 @@
   </q-page>
 </template>
 
+<style scoped lang="sass">
+.page
+  padding: 10px
+.my-fa-size
+  font-size: 20px
+</style>
+
 <script>
 import { ref } from "vue";
-import { Loading, Notify } from "quasar";
+import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
 import { useRouter } from "vue-router";
 import { useUserStore } from "stores/user";
@@ -94,10 +101,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="sass">
-.page
-  padding: 10px
-.my-fa-size
-  font-size: 20px
-</style>
