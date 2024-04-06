@@ -135,8 +135,15 @@ import { useGlobalStore } from "stores/global";
 export default {
   name: "UserRegistrationHeroPage",
   setup() {
+    const $router = useRouter();
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
+
+    const createHero = function () {
+      $router.push("UserRegistrationHeroCreate");
+    };
+
+    return { createHero };
 
     return {};
   },

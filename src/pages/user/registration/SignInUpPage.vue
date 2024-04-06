@@ -1,7 +1,7 @@
 <template>
   <q-page class="row justify-center items-center">
     <div class="q-pa-md flex justify-center">
-      <div class="q-gutter-md flex justify-center" style="width: 300px">
+      <div class="q-gutter-md flex justify-center" style="width: 500px">
         <q-card>
           <q-card-section>
             <q-input
@@ -36,30 +36,6 @@
                 ></i>
               </template>
             </q-input>
-            <VueClientRecaptcha
-              class="form-recaptcha"
-              :value="recaptchaText"
-              :count="6"
-              @getCode="getCaptchaCode"
-              @isValid="checkValidCaptcha"
-            >
-              <template #icon>
-                <q-btn
-                  round
-                  color="brown-5"
-                  icon="fa-solid fa-arrows-rotate fa-2x fa-spin"
-                  style="--fa-animation-duration: 25s"
-                >
-                  <q-tooltip
-                    class="bg-indigo"
-                    :offset="[10, 10]"
-                    style="font-size: 16px !important"
-                  >
-                    Обновить Капчу
-                  </q-tooltip>
-                </q-btn>
-              </template>
-            </VueClientRecaptcha>
             <q-input
               class="form-input"
               v-model="recaptchaText"
@@ -72,20 +48,52 @@
               outlined
               label="Введите текст указанный на картинке"
             />
-            <q-btn
-              class="form-button shadow-2"
-              style="width: 300px"
-              color="primary"
-              label="Войти"
-              @click="onAuth"
-            />
-            <q-btn
-              class="form-button shadow-2"
-              style="width: 300px"
-              color="primary"
-              label="Зарегистрироваться"
-              @click="onReg"
-            />
+            <q-card>
+              <VueClientRecaptcha
+                class="form-recaptcha flex items-center"
+                :value="recaptchaText"
+                :count="6"
+                @getCode="getCaptchaCode"
+                @isValid="checkValidCaptcha"
+              >
+                <template #icon>
+                  &nbsp;&nbsp;&nbsp;
+                  <q-btn
+                    round
+                    color="brown-3"
+                    icon="fa-solid fa-arrows-rotate fa-2x fa-spin"
+                    style="--fa-animation-duration: 15s"
+                  >
+                    <q-tooltip
+                      class="bg-indigo"
+                      :offset="[10, 10]"
+                      style="font-size: 16px !important"
+                    >
+                      Обновить Капчу
+                    </q-tooltip>
+                  </q-btn>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </template>
+              </VueClientRecaptcha>
+            </q-card>
+            <div class="flex justify-center items-center">
+              <q-btn
+                class="form-button shadow-2"
+                style="width: 200px"
+                color="primary"
+                label="Войти"
+                @click="onAuth"
+              />
+            </div>
+            <div class="flex justify-center items-center">
+              <q-btn
+                class="form-button shadow-2"
+                style="width: 200px"
+                color="green"
+                label="Зарегистрироваться"
+                @click="onReg"
+              />
+            </div>
           </q-card-section>
         </q-card>
       </div>
@@ -97,11 +105,12 @@
 .form-input, .form-button
   margin-top: 10px
   margin-bottom: 10px
+  width: 400px
 
 .form-recaptcha
-  display: grid
-  grid-template-columns: 50px 0px
-  margin-top: 40px
+  margin-top: 10px
+  margin-bottom: 10px
+  width: 400px
 </style>
 
 <script>
