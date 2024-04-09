@@ -14,9 +14,9 @@
     "up": "yarn install && yarn upgrade"
   },
   "dependencies": {
-    "@nargarath/vue-recaptcha": "^3.0.0-alpha.7",
     "@quasar/extras": "^1.16.11",
     "axios": "^1.6.8",
+    "decimal.js": "^10.4.3",
     "pinia": "^2.1.7",
     "quasar": "^2.15.2",
     "socket.io-client": "4.7.5",
@@ -30,7 +30,7 @@
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-vue": "^9.24.0",
+    "eslint-plugin-vue": "^9.24.1",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5"
   },

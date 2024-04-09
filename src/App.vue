@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { Decimal } from "boot/decimal";
+
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { socket } from "boot/socket";
@@ -13,6 +15,8 @@ import { useUserStore } from "stores/user";
 export default defineComponent({
   name: "App",
   setup() {
+    Decimal.set({ rounding: Decimal.ROUND_DOWN, precision: 999 });
+
     const $router = useRouter();
     const globalStore = useGlobalStore();
     const userStore = useUserStore();

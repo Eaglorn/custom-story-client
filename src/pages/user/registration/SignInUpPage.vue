@@ -4,96 +4,98 @@
       <div class="q-gutter-md flex justify-center" style="width: 500px">
         <q-card>
           <q-card-section>
-            <q-input
-              class="form-input"
-              v-model="formEmail"
-              type="email"
-              :rules="[
-                (val) => !!val || '* Необходимо заполнить',
-                (val) => val.length <= 40 || 'Не более 40 символов',
-                () => isValidEmail(),
-              ]"
-              outlined
-              label="Электронный почтовый ящик *"
-            />
-            <q-input
-              class="form-input"
-              v-model="formPassword"
-              :rules="[
-                (val) => !!val || '* Необходимо заполнить',
-                (val) => val.length <= 16 || 'Не более 16 символов',
-                () => isValidPassword(),
-              ]"
-              outlined
-              label="Пароль *"
-              :type="isPwd ? 'password' : 'text'"
-            >
-              <template v-slot:append>
-                <i
-                  class="fa-solid"
-                  v-bind:class="{ 'fa-eye': isPwd, 'fa-eye-slash': !isPwd }"
-                  @click="isPwd = !isPwd"
-                ></i>
-              </template>
-            </q-input>
-            <q-input
-              class="form-input"
-              v-model="recaptchaText"
-              type="text"
-              :rules="[
-                (val) => !!val || '* Необходимо заполнить',
-                (val) => val.length <= 6 || 'Не более 6 символов',
-                (val) => val == recaptchaValue || 'Неправильно набран текст',
-              ]"
-              outlined
-              label="Введите текст указанный на картинке"
-            />
-            <q-card>
-              <VueClientRecaptcha
-                class="form-recaptcha flex items-center"
-                :value="recaptchaText"
-                :count="6"
-                @getCode="getCaptchaCode"
-                @isValid="checkValidCaptcha"
+            <q-form>
+              <q-input
+                class="form-input"
+                v-model="formEmail"
+                type="email"
+                :rules="[
+                  (val) => !!val || '* Необходимо заполнить',
+                  (val) => val.length <= 40 || 'Не более 40 символов',
+                  () => isValidEmail(),
+                ]"
+                outlined
+                label="Электронный почтовый ящик *"
+              />
+              <q-input
+                class="form-input"
+                v-model="formPassword"
+                :rules="[
+                  (val) => !!val || '* Необходимо заполнить',
+                  (val) => val.length <= 16 || 'Не более 16 символов',
+                  () => isValidPassword(),
+                ]"
+                outlined
+                label="Пароль *"
+                :type="isPwd ? 'password' : 'text'"
               >
-                <template #icon>
-                  &nbsp;&nbsp;&nbsp;
-                  <q-btn
-                    round
-                    color="brown-3"
-                    icon="fa-solid fa-arrows-rotate fa-2x fa-spin"
-                    style="--fa-animation-duration: 15s"
-                  >
-                    <q-tooltip
-                      class="bg-indigo"
-                      :offset="[10, 10]"
-                      style="font-size: 16px !important"
-                    >
-                      Обновить Капчу
-                    </q-tooltip>
-                  </q-btn>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <template v-slot:append>
+                  <i
+                    class="fa-solid"
+                    v-bind:class="{ 'fa-eye': isPwd, 'fa-eye-slash': !isPwd }"
+                    @click="isPwd = !isPwd"
+                  ></i>
                 </template>
-              </VueClientRecaptcha>
-            </q-card>
-            <div class="flex justify-center items-center">
-              <q-btn
-                class="form-button shadow-2"
-                style="width: 200px"
-                color="primary"
-                label="Войти"
-                @click="onAuth"
+              </q-input>
+              <q-input
+                class="form-input"
+                v-model="recaptchaText"
+                type="text"
+                :rules="[
+                  (val) => !!val || '* Необходимо заполнить',
+                  (val) => val.length <= 6 || 'Не более 6 символов',
+                  (val) => val == recaptchaValue || 'Неправильно набран текст',
+                ]"
+                outlined
+                label="Введите текст указанный на картинке"
               />
-            </div>
-            <div class="flex justify-center items-center">
-              <q-btn
-                class="form-button shadow-2"
-                style="width: 200px"
-                color="green"
-                label="Зарегистрироваться"
-                @click="onReg"
-              />
-            </div>
+              <q-card>
+                <VueClientRecaptcha
+                  class="form-recaptcha flex items-center"
+                  :value="recaptchaText"
+                  :count="6"
+                  @getCode="getCaptchaCode"
+                  @isValid="checkValidCaptcha"
+                >
+                  <template #icon>
+                    &nbsp;&nbsp;&nbsp;
+                    <q-btn
+                      round
+                      color="brown-3"
+                      icon="fa-solid fa-arrows-rotate fa-2x fa-spin"
+                      style="--fa-animation-duration: 15s"
+                    >
+                      <q-tooltip
+                        class="bg-indigo"
+                        :offset="[10, 10]"
+                        style="font-size: 16px !important"
+                      >
+                        Обновить Капчу
+                      </q-tooltip>
+                    </q-btn>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </template>
+                </VueClientRecaptcha>
+              </q-card>
+              <div class="flex justify-center items-center">
+                <q-btn
+                  class="form-button shadow-2"
+                  style="width: 200px"
+                  color="primary"
+                  label="Войти"
+                  @click="onAuth"
+                />
+              </div>
+              <div class="flex justify-center items-center">
+                <q-btn
+                  class="form-button shadow-2"
+                  style="width: 200px"
+                  color="green"
+                  label="Зарегистрироваться"
+                  @click="onReg"
+                />
+              </div>
+            </q-form>
           </q-card-section>
         </q-card>
       </div>
@@ -133,8 +135,8 @@ export default defineComponent({
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 
-    var formEmail = ref("");
-    var formPassword = ref("");
+    const formEmail = ref("");
+    const formPassword = ref("");
     const isPwd = ref(true);
 
     const isValidEmail = function () {
