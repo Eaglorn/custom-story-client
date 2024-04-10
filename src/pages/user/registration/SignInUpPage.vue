@@ -4,30 +4,31 @@
       <div class="q-gutter-md flex justify-center" style="width: 500px">
         <q-card>
           <q-card-section>
-            <q-form>
+            <q-form ref="form">
               <q-input
                 class="form-input"
-                v-model="formEmail"
+                v-model="formData.email"
                 type="email"
-                :rules="[
-                  (val) => !!val || '* Необходимо заполнить',
-                  (val) => val.length <= 40 || 'Не более 40 символов',
-                  () => isValidEmail(),
-                ]"
                 outlined
                 label="Электронный почтовый ящик *"
+                lazy-rules
+                :rules="[
+                  () =>
+                    !formValidate.email.$invalid || 'Не корректно введён email',
+                ]"
               />
               <q-input
                 class="form-input"
-                v-model="formPassword"
-                :rules="[
-                  (val) => !!val || '* Необходимо заполнить',
-                  (val) => val.length <= 16 || 'Не более 16 символов',
-                  () => isValidPassword(),
-                ]"
+                v-model="formData.password"
                 outlined
                 label="Пароль *"
                 :type="isPwd ? 'password' : 'text'"
+                lazy-rules
+                :rules="[
+                  () =>
+                    !formValidate.password.$invalid ||
+                    'Не корректно введён пароль',
+                ]"
               >
                 <template v-slot:append>
                   <i
@@ -39,12 +40,13 @@
               </q-input>
               <q-input
                 class="form-input"
-                v-model="recaptchaText"
+                v-model="formData.recaptcha"
                 type="text"
+                lazy-rules
                 :rules="[
-                  (val) => !!val || '* Необходимо заполнить',
-                  (val) => val.length <= 6 || 'Не более 6 символов',
-                  (val) => val == recaptchaValue || 'Неправильно набран текст',
+                  () =>
+                    !formValidate.recaptcha.$invalid ||
+                    'Не корректно введён текст',
                 ]"
                 outlined
                 label="Введите текст указанный на картинке"
@@ -66,7 +68,7 @@
                       style="--fa-animation-duration: 15s"
                     >
                       <q-tooltip
-                        class="bg-indigo"
+                        class="primary"
                         :offset="[10, 10]"
                         style="font-size: 16px !important"
                       >
@@ -100,6 +102,7 @@
         </q-card>
       </div>
     </div>
+    {{ coord }}
   </q-page>
 </template>
 
@@ -116,11 +119,14 @@
 </style>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
 import VueClientRecaptcha from "vue-client-recaptcha";
 import { useRouter } from "vue-router";
+import { useVuelidate, required, maxLength } from "boot/vuelidate";
+
+import { RandomCoord } from "boot/randomcoord";
 
 import { useGlobalStore } from "stores/global";
 import { useUserStore } from "stores/user";
@@ -135,20 +141,13 @@ export default defineComponent({
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 
-    const formEmail = ref("");
-    const formPassword = ref("");
+    const formData = ref({ email: "", password: "", recaptcha: "" });
+
     const isPwd = ref(true);
 
-    const isValidEmail = function () {
-      const emailPattern =
-        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      return (
-        emailPattern.test(formEmail.value) ||
-        "Не верно введён электронный почтовый ящик"
-      );
-    };
+    const coord = RandomCoord();
 
-    const isValidPassword = function () {
+    /*const isValidPassword = function () {
       const passwordPattern =
         /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
       return (
@@ -159,11 +158,58 @@ export default defineComponent({
           "как минимум из одной цифры, " +
           "хотя бы один специальный символ."
       );
-    };
+    };*/
 
     const recaptchaText = ref("");
     const recaptchaValue = ref("");
     const recaptchaResult = ref(false);
+
+    const mailValidate = (value) => {
+      const emailPattern =
+        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+      if (emailPattern.test(value)) {
+        return true;
+      }
+      return false;
+    };
+
+    const passwordValidate = (value) => {
+      const passwordPattern =
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
+      if (passwordPattern.test(value)) {
+        return true;
+      }
+      return false;
+    };
+
+    const recaptchaValidate = (value) => {
+      if (value == recaptchaValue.value) {
+        return true;
+      }
+      return false;
+    };
+
+    const rules = computed(() => ({
+      email: {
+        required,
+        max: maxLength(ref(40)),
+        mailValidate,
+      },
+      password: {
+        required,
+        max: maxLength(ref(16)),
+        passwordValidate,
+      },
+      recaptcha: {
+        required,
+        max: maxLength(ref(6)),
+        recaptchaValidate,
+      },
+    }));
+
+    const form = ref();
+
+    const formValidate = useVuelidate(rules, formData);
 
     const getCaptchaCode = (value) => {
       recaptchaText.value = "";
@@ -174,123 +220,151 @@ export default defineComponent({
     };
 
     const onAuth = function () {
-      if (!recaptchaResult.value) return;
       Loading.show();
-      api({
-        method: "post",
-        url: globalStore.getAjaxUri("user/authorization"),
-        data: {
-          email: formEmail.value,
-          password: formPassword.value,
-          socket: userStore.socket,
-        },
-        timeout: 10000,
-        responseType: "json",
-      })
-        .then((response) => {
-          if (response.data.success === true) {
-            userStore.$patch({
-              auth: true,
-              type: response.data.type,
-            });
-            Cookies.set("email", formEmail.value, { expires: 1, secure: true });
-            Cookies.set("password", formPassword.value, {
-              expires: 3,
-              secure: true,
-            });
+      if (formValidate.value.$invalid) {
+        form.value.submit();
+        Notify.create({
+          progress: true,
+          color: "warning",
+          position: "top",
+          message: "Неправильно заполнены поля в форме",
+          icon: "warning",
+          timeout: 5000,
+          textColor: "black",
+        });
+        Loading.hide();
+      } else {
+        api({
+          method: "post",
+          url: globalStore.getAjaxUri("user/authorization"),
+          data: {
+            email: formData.value.email,
+            password: formData.value.password,
+            socket: userStore.socket,
+          },
+          timeout: 10000,
+          responseType: "json",
+        })
+          .then((response) => {
+            if (response.data.success === true) {
+              userStore.$patch({
+                auth: true,
+                type: response.data.type,
+              });
+              Cookies.set("email", formEmail.value, {
+                expires: 1,
+                secure: true,
+              });
+              Cookies.set("password", formPassword.value, {
+                expires: 3,
+                secure: true,
+              });
+              Loading.hide();
+            } else {
+              if (response.data.email === false) {
+                Notify.create({
+                  progress: true,
+                  color: "negative",
+                  position: "top",
+                  message:
+                    "Введённый электронный почтовый ящик не зарегистрирован.",
+                  icon: "report_problem",
+                });
+              } else if (response.data.password === false) {
+                Notify.create({
+                  progress: true,
+                  color: "negative",
+                  position: "top",
+                  message: "Неверно набран пароль.",
+                  icon: "report_problem",
+                });
+              }
+              Loading.hide();
+            }
+          })
+          .catch(function () {
             Loading.hide();
-          } else {
-            if (response.data.email === false) {
+            Notify.create({
+              color: "negative",
+              position: "top",
+              message:
+                "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
+              icon: "report_problem",
+            });
+          });
+      }
+    };
+
+    const onReg = function () {
+      Loading.show();
+      if (formValidate.value.$invalid) {
+        form.value.submit();
+        Notify.create({
+          progress: true,
+          color: "warning",
+          position: "top",
+          message: "Неправильно заполнены поля в форме",
+          icon: "warning",
+          timeout: 5,
+          textColor: "black",
+        });
+        Loading.hide();
+      } else {
+        api({
+          method: "post",
+          url: globalStore.getAjaxUri("user/registration"),
+          data: {
+            email: formData.value.email,
+            password: formData.value.password,
+            socket: userStore.socket,
+          },
+          timeout: 10000,
+          responseType: "json",
+        })
+          .then((response) => {
+            if (response.data.registration_email === true) {
               Notify.create({
                 progress: true,
                 color: "negative",
                 position: "top",
                 message:
-                  "Введённый электронный почтовый ящик не зарегистрирован.",
+                  "Введённый электронный почтовый ящик находится на этапе регистрации. Попробуйте зарегистрироваться под другим электронным почтовым ящиком. Если это вы регистрировали введённый электронный почтовый ящик, попробуйте заного выполнить регистрацию через 60 минут.",
                 icon: "report_problem",
               });
-            } else if (response.data.password === false) {
-              Notify.create({
-                progress: true,
-                color: "negative",
-                position: "top",
-                message: "Неверно набран пароль.",
-                icon: "report_problem",
-              });
+            } else {
+              if (response.data.success === true) {
+                userStore.email = formData.value.email;
+                $router.push("UserRegistrationCode");
+              } else {
+                Notify.create({
+                  progress: true,
+                  color: "negative",
+                  position: "top",
+                  message: "Введённый электронный почтовый ящик занят",
+                  icon: "report_problem",
+                });
+              }
             }
             Loading.hide();
-          }
-        })
-        .catch(function () {
-          Loading.hide();
-          Notify.create({
-            color: "negative",
-            position: "top",
-            message:
-              "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
-            icon: "report_problem",
-          });
-        });
-    };
-
-    const onReg = function () {
-      if (!recaptchaResult.value) return;
-      Loading.show();
-      api({
-        method: "post",
-        url: globalStore.getAjaxUri("user/registration"),
-        data: {
-          email: formEmail.value,
-          password: formPassword.value,
-          socket: userStore.socket,
-        },
-        timeout: 10000,
-        responseType: "json",
-      })
-        .then((response) => {
-          if (response.data.registration_email === true) {
+          })
+          .catch(function () {
             Notify.create({
-              progress: true,
               color: "negative",
               position: "top",
               message:
-                "Введённый электронный почтовый ящик находится на этапе регистрации. Попробуйте зарегистрироваться под другим электронным почтовым ящиком. Если это вы регистрировали введённый электронный почтовый ящик, попробуйте заного выполнить регистрацию через 60 минут.",
+                "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
               icon: "report_problem",
             });
-          } else {
-            if (response.data.success === true) {
-              userStore.email = formEmail.value;
-              $router.push("UserRegistrationCode");
-            } else {
-              Notify.create({
-                progress: true,
-                color: "negative",
-                position: "top",
-                message: "Введённый электронный почтовый ящик занят",
-                icon: "report_problem",
-              });
-            }
-          }
-          Loading.hide();
-        })
-        .catch(function () {
-          Notify.create({
-            color: "negative",
-            position: "top",
-            message:
-              "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
-            icon: "report_problem",
+            Loading.hide();
           });
-          Loading.hide();
-        });
+      }
     };
 
     return {
-      formEmail,
-      formPassword,
+      formData,
+      form,
+      formValidate,
       isPwd,
-      isValidEmail,
-      isValidPassword,
       recaptchaText,
       recaptchaValue,
       recaptchaResult,
@@ -298,6 +372,7 @@ export default defineComponent({
       checkValidCaptcha,
       onAuth,
       onReg,
+      coord,
     };
   },
 });
