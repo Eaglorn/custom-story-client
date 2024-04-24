@@ -29,8 +29,8 @@ export default {
   name: "UserRegistrationHeroPage",
   setup() {
     const $router = useRouter();
-    const globalStore = useGlobalStore();
-    const userStore = useUserStore();
+    const storeGlobal = useGlobalStore();
+    const storeuser = useUserStore();
 
     const selectBaseCore = ref("");
     const options = ["Земля", "Вода", "Воздух", "Огонь"];

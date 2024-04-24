@@ -2,16 +2,28 @@ import { defineStore } from "pinia";
 
 export const useGlobalStore = defineStore("global", {
   state: () => ({
-    api: "",
+    app: {
+      version: "0.0.1",
+    },
+    api: {
+      address: "http://127.0.0.1:3000/api/",
+    },
+    timeout: {
+      api: {
+        response: 10000,
+        error: {
+          low: 2000,
+          medium: 3000,
+          high: 3500,
+        },
+      },
+    },
+
+    socket: null,
   }),
   actions: {
-    getAjaxUri(response) {
-      console.log(response);
-      console.log(this.api + response);
-      return this.api + response;
-    },
-    setAjaxUri(arg) {
-      this.api = arg;
+    getAjaxUri(data) {
+      return this.api.address + data;
     },
   },
 });

@@ -138,8 +138,8 @@ export default defineComponent({
   },
   setup() {
     const $router = useRouter();
-    const globalStore = useGlobalStore();
-    const userStore = useUserStore();
+    const storeGlobal = useGlobalStore();
+    const storeUser = useUserStore();
 
     const formData = ref({ email: "", password: "", recaptcha: "" });
 
@@ -167,26 +167,17 @@ export default defineComponent({
     const mailValidate = (value) => {
       const emailPattern =
         /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      if (emailPattern.test(value)) {
-        return true;
-      }
-      return false;
+      return emailPattern.test(value);
     };
 
     const passwordValidate = (value) => {
       const passwordPattern =
         /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
-      if (passwordPattern.test(value)) {
-        return true;
-      }
-      return false;
+      return passwordPattern.test(value);
     };
 
     const recaptchaValidate = (value) => {
-      if (value == recaptchaValue.value) {
-        return true;
-      }
-      return false;
+      return value == recaptchaValue.value;
     };
 
     const rules = computed(() => ({
@@ -229,25 +220,25 @@ export default defineComponent({
           position: "top",
           message: "Неправильно заполнены поля в форме",
           icon: "warning",
-          timeout: 5000,
+          timeout: storeGlobal.timeout.api.error.high,
           textColor: "black",
         });
         Loading.hide();
       } else {
         api({
           method: "post",
-          url: globalStore.getAjaxUri("user/authorization"),
+          url: storeGlobal.getAjaxUri("user/authorization"),
           data: {
             email: formData.value.email,
             password: formData.value.password,
-            socket: userStore.socket,
+            socket: storeUser.socket,
           },
-          timeout: 10000,
+          timeout: storeGlobal.timeout.api.response,
           responseType: "json",
         })
           .then((response) => {
             if (response.data.success === true) {
-              userStore.$patch({
+              storeUser.$patch({
                 auth: true,
                 type: response.data.type,
               });
@@ -269,6 +260,7 @@ export default defineComponent({
                   message:
                     "Введённый электронный почтовый ящик не зарегистрирован.",
                   icon: "report_problem",
+                  timeout: storeGlobal.timeout.api.error.high,
                 });
               } else if (response.data.password === false) {
                 Notify.create({
@@ -277,6 +269,7 @@ export default defineComponent({
                   position: "top",
                   message: "Неверно набран пароль.",
                   icon: "report_problem",
+                  timeout: storeGlobal.timeout.api.error.high,
                 });
               }
               Loading.hide();
@@ -290,6 +283,7 @@ export default defineComponent({
               message:
                 "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
               icon: "report_problem",
+              timeout: storeGlobal.timeout.api.error.high,
             });
           });
       }
@@ -305,20 +299,20 @@ export default defineComponent({
           position: "top",
           message: "Неправильно заполнены поля в форме",
           icon: "warning",
-          timeout: 5,
           textColor: "black",
+          timeout: storeGlobal.timeout.api.error.high,
         });
         Loading.hide();
       } else {
         api({
           method: "post",
-          url: globalStore.getAjaxUri("user/registration"),
+          url: storeGlobal.getAjaxUri("user/registration"),
           data: {
             email: formData.value.email,
             password: formData.value.password,
-            socket: userStore.socket,
+            socket: storeUser.socket,
           },
-          timeout: 10000,
+          timeout: storeGlobal.timeout.api.response,
           responseType: "json",
         })
           .then((response) => {
@@ -330,20 +324,20 @@ export default defineComponent({
                 message:
                   "Введённый электронный почтовый ящик находится на этапе регистрации. Попробуйте зарегистрироваться под другим электронным почтовым ящиком. Если это вы регистрировали введённый электронный почтовый ящик, попробуйте заного выполнить регистрацию через 60 минут.",
                 icon: "report_problem",
+                timeout: storeGlobal.timeout.api.error.high,
               });
+            } else if (response.data.success === true) {
+              storeUser.email = formData.value.email;
+              $router.push("UserRegistrationCode");
             } else {
-              if (response.data.success === true) {
-                userStore.email = formData.value.email;
-                $router.push("UserRegistrationCode");
-              } else {
-                Notify.create({
-                  progress: true,
-                  color: "negative",
-                  position: "top",
-                  message: "Введённый электронный почтовый ящик занят",
-                  icon: "report_problem",
-                });
-              }
+              Notify.create({
+                progress: true,
+                color: "negative",
+                position: "top",
+                message: "Введённый электронный почтовый ящик занят",
+                icon: "report_problem",
+                timeout: storeGlobal.timeout.api.error.high,
+              });
             }
             Loading.hide();
           })
@@ -354,6 +348,7 @@ export default defineComponent({
               message:
                 "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
               icon: "report_problem",
+              timeout: storeGlobal.timeout.api.error.high,
             });
             Loading.hide();
           });

@@ -53,8 +53,8 @@ export default {
   name: "UserRegistrationCodePage",
   setup() {
     const $router = useRouter();
-    const globalStore = useGlobalStore();
-    const userStore = useUserStore();
+    const storeGlobal = useGlobalStore();
+    const storeUser = useUserStore();
 
     const formCode = ref("");
 
@@ -63,12 +63,12 @@ export default {
 
       api({
         method: "post",
-        url: globalStore.getAjaxUri("user/registration/check"),
+        url: storeGlobal.getAjaxUri("user/registration/check"),
         data: {
-          email: userStore.email,
+          email: storeUser.email,
           code: formCode.value,
         },
-        timeout: 10000,
+        timeout: storeGlobal.timeout.api.response,
         responseType: "json",
       })
         .then((response) => {
@@ -82,6 +82,7 @@ export default {
               position: "top",
               message: "Не верно введён код",
               icon: "report_problem",
+              timeout: storeGlobal.timeout.api.error.high,
             });
           }
         })
@@ -93,6 +94,7 @@ export default {
             message:
               "Нет соединения с сервером. Попробуйте отправить код ещё раз",
             icon: "report_problem",
+            timeout: storeGlobal.timeout.api.error.high,
           });
         });
     };

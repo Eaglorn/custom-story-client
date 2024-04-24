@@ -21,24 +21,20 @@ export default defineComponent({
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 
-    globalStore.setAjaxUri("http://127.0.0.1:3000/api/");
-
     socket.on("connect", () => {
       userStore.socket = socket.id;
-      console.log(socket.id);
     });
 
     socket.on("disconnect", () => {
       userStore.socket = "";
-      console.log(socket.id);
     });
 
     socket.on("chat", (arg) => {
       console.log(arg);
     });
 
-    //$router.push("UserSignInUp");
-    $router.push("UserRegistrationTimeHistory");
+    $router.push("UserSignInUp");
+    //$router.push("UserRegistrationTimeHistory");
   },
 });
 </script>

@@ -73,8 +73,8 @@ export default {
   name: "UserRegistrationHeroPage",
   setup() {
     const $router = useRouter();
-    const globalStore = useGlobalStore();
-    const userStore = useUserStore();
+    const storeGlobal = useGlobalStore();
+    const storeUser = useUserStore();
 
     const createHero = function () {
       $router.push("UserRegistrationHeroCreate");
