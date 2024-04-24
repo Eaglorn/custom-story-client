@@ -37,8 +37,8 @@ export default defineComponent({
       console.log(arg);
     });
 
-    $router.push("UserSignInUp");
-    //$router.push("UserRegistrationTimeHistory");
+    //$router.push("UserSignInUp");
+    $router.push("UserRegistrationTimeHistory");
   },
 });
 </script>
