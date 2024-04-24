@@ -2,7 +2,7 @@
   <q-layout view="lHh lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <div>CustomStory v0.0.1</div>
+        <div>CustomStory v{{ version }}</div>
         <q-space />
       </q-toolbar>
     </q-header>
@@ -15,12 +15,16 @@
 
 <script>
 import { defineComponent } from "vue";
+import { useGlobalStore } from "stores/global";
 
 export default defineComponent({
   name: "MainLayout",
-
   setup() {
-    return {};
+    const storeGlobal = useGlobalStore();
+
+    const version = storeGlobal.app.version;
+
+    return { version };
   },
 });
 </script>
