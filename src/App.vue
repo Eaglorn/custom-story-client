@@ -7,7 +7,7 @@ import { Decimal } from "boot/decimal";
 
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
-import { socket } from "boot/socket";
+import { io } from "boot/socket";
 
 import { useGlobalStore } from "stores/global";
 import { useUserStore } from "stores/user";
