@@ -4,7 +4,7 @@
       <q-toolbar>
         <div>
           CustomStory v{{ version }} Количество игроков:
-          <q-badge color="orange" text-color="black" label="{{countPlayers}}" />
+          <q-badge color="orange" text-color="black" :label="countPlayers" />
         </div>
         <q-space />
       </q-toolbar>
