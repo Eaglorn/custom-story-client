@@ -102,7 +102,6 @@
         </q-card>
       </div>
     </div>
-    {{ coord }}
   </q-page>
 </template>
 
@@ -126,8 +125,6 @@ import VueClientRecaptcha from "vue-client-recaptcha";
 import { useRouter } from "vue-router";
 import { useVuelidate, required, maxLength } from "boot/vuelidate";
 
-import { RandomCoord } from "boot/randomcoord";
-
 import { useGlobalStore } from "stores/global";
 import { useUserStore } from "stores/user";
 
@@ -144,8 +141,6 @@ export default defineComponent({
     const formData = ref({ email: "", password: "", recaptcha: "" });
 
     const isPwd = ref(true);
-
-    const coord = RandomCoord();
 
     /*const isValidPassword = function () {
       const passwordPattern =
@@ -367,7 +362,6 @@ export default defineComponent({
       checkValidCaptcha,
       onAuth,
       onReg,
-      coord,
     };
   },
 });
