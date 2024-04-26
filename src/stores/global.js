@@ -5,8 +5,11 @@ export const useGlobalStore = defineStore("global", {
     app: {
       version: "0.0.1",
     },
+    server: {
+      address: "https://customstory.ru/",
+    },
     api: {
-      address: "http://127.0.0.1:3000/api/",
+      address: "https://customstory.ru/api/",
     },
     timeout: {
       api: {
@@ -18,6 +21,8 @@ export const useGlobalStore = defineStore("global", {
         },
       },
     },
+
+    countPlayers: 0,
 
     socket: null,
   }),

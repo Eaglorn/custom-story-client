@@ -18,19 +18,25 @@ export default defineComponent({
     Decimal.set({ rounding: Decimal.ROUND_DOWN, precision: 999 });
 
     const $router = useRouter();
-    const globalStore = useGlobalStore();
-    const userStore = useUserStore();
+    const storeGlobal = useGlobalStore();
+    const storeUser = useUserStore();
 
-    socket.on("connect", () => {
-      userStore.socket = socket.id;
+    const socket = io(storeGlobal.server.address, {
+      query: {
+        email: storeUser.email,
+        password: storeUser.password,
+      },
+    });
+    storeGlobal.socket = socket;
+
+    storeGlobal.socket.on("connect", () => {});
+
+    storeGlobal.socket.on("GlobalCountAddPlayer", () => {
+      storeGlobal.countPlayers++;
     });
 
-    socket.on("disconnect", () => {
-      userStore.socket = "";
-    });
-
-    socket.on("chat", (arg) => {
-      console.log(arg);
+    storeGlobal.socket.on("GlobalCountRemovePlayer", () => {
+      storeGlobal.countPlayers--;
     });
 
     $router.push("UserSignInUp");

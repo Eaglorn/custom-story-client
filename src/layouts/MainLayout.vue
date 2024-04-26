@@ -2,7 +2,10 @@
   <q-layout view="lHh lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <div>CustomStory v{{ version }}</div>
+        <div>
+          CustomStory v{{ version }} Количество игроков:
+          <q-badge color="orange" text-color="black" label="countPlayers" />
+        </div>
         <q-space />
       </q-toolbar>
     </q-header>
@@ -14,13 +17,15 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 import { useGlobalStore } from "stores/global";
 
 export default defineComponent({
   name: "MainLayout",
   setup() {
     const storeGlobal = useGlobalStore();
+
+    const countPlayers = computed(() => storeGlobal.countPlayers);
 
     const version = storeGlobal.app.version;
 
