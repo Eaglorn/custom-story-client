@@ -22,7 +22,7 @@ export const useGlobalStore = defineStore("global", {
       },
     },
 
-    countPlayers: 0,
+    playersCount: 0,
 
     socket: null,
   }),

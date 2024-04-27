@@ -31,8 +31,16 @@ export default defineComponent({
 
     storeGlobal.socket.on("connect", () => {});
 
-    storeGlobal.socket.on("ChangeCountPlayer", (data) => {
-      storeGlobal.countPlayers = data.countPlayers;
+    storeGlobal.socket.on("GetPlayersCount", (data) => {
+      storeGlobal.playersCount = data.value;
+    });
+
+    storeGlobal.socket.on("AddPlayersCount", (data) => {
+      storeGlobal.playersCount++;
+    });
+
+    storeGlobal.socket.on("RemovePlayersCount", (data) => {
+      storeGlobal.playersCount--;
     });
 
     $router.push("UserSignInUp");

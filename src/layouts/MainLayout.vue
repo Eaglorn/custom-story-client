@@ -4,7 +4,7 @@
       <q-toolbar>
         <div>
           CustomStory v{{ version }} Количество игроков:
-          <q-badge color="orange" text-color="black" :label="countPlayers" />
+          <q-badge color="orange" text-color="black" :label="playersCount" />
         </div>
         <q-space />
       </q-toolbar>
@@ -25,11 +25,11 @@ export default defineComponent({
   setup() {
     const storeGlobal = useGlobalStore();
 
-    const countPlayers = computed(() => storeGlobal.countPlayers);
+    const playersCount = computed(() => storeGlobal.playersCount);
 
     const version = storeGlobal.app.version;
 
-    return { version, countPlayers };
+    return { version, playersCount };
   },
 });
 </script>
