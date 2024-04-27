@@ -6,10 +6,10 @@ export const useGlobalStore = defineStore("global", {
       version: "0.0.1",
     },
     server: {
-      address: "https://customstory.ru/",
+      address: "https://customstory.online/",
     },
     api: {
-      address: "https://customstory.ru/api/",
+      address: "https://customstory.online/api/",
     },
     timeout: {
       api: {
