@@ -43,9 +43,9 @@ export default defineComponent({
       storeGlobal.playersCount--;
     });
 
-    //$router.push("UserSignInUp");
+    $router.push("UserSignInUp");
     //$router.push("UserRegistrationTimeHistory");
-    $router.push("UserRegistrationHeroCreate");
+    //$router.push("UserRegistrationHeroCreate");
   },
 });
 </script>
