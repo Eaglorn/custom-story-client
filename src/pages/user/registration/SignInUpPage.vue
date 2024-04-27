@@ -295,7 +295,7 @@ export default defineComponent({
           message: "Неправильно заполнены поля в форме",
           icon: "warning",
           textColor: "black",
-          timeout: sstoreGlobal.timeout.api.error.low,
+          timeout: storeGlobal.timeout.api.error.low,
         });
         Loading.hide();
       } else {
