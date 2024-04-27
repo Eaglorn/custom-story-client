@@ -92,7 +92,7 @@
                 <q-btn
                   class="form-button shadow-2"
                   style="width: 200px"
-                  color="green"
+                  color="positive"
                   label="Зарегистрироваться"
                   @click="onReg"
                 />
@@ -215,7 +215,7 @@ export default defineComponent({
           position: "top",
           message: "Неправильно заполнены поля в форме",
           icon: "warning",
-          timeout: storeGlobal.timeout.api.error.high,
+          timeout: storeGlobal.timeout.api.error.low,
           textColor: "black",
         });
         Loading.hide();
@@ -255,7 +255,7 @@ export default defineComponent({
                   message:
                     "Введённый электронный почтовый ящик не зарегистрирован.",
                   icon: "report_problem",
-                  timeout: storeGlobal.timeout.api.error.high,
+                  timeout: storeGlobal.timeout.api.error.low,
                 });
               } else if (response.data.password === false) {
                 Notify.create({
@@ -264,7 +264,7 @@ export default defineComponent({
                   position: "top",
                   message: "Неверно набран пароль.",
                   icon: "report_problem",
-                  timeout: storeGlobal.timeout.api.error.high,
+                  timeout: storeGlobal.timeout.api.error.low,
                 });
               }
               Loading.hide();
@@ -295,7 +295,7 @@ export default defineComponent({
           message: "Неправильно заполнены поля в форме",
           icon: "warning",
           textColor: "black",
-          timeout: storeGlobal.timeout.api.error.high,
+          timeout: sstoreGlobal.timeout.api.error.low,
         });
         Loading.hide();
       } else {
@@ -331,7 +331,7 @@ export default defineComponent({
                 position: "top",
                 message: "Введённый электронный почтовый ящик занят",
                 icon: "report_problem",
-                timeout: storeGlobal.timeout.api.error.high,
+                timeout: storeGlobal.timeout.api.error.low,
               });
             }
             Loading.hide();

@@ -2,11 +2,13 @@
   <q-layout view="lHh lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <div>
-          CustomStory v{{ version }} Количество игроков:
-          <q-badge color="orange" text-color="black" :label="playersCount" />
-        </div>
+        <q-toolbar-title> CustomStory v{{ version }} </q-toolbar-title>
         <q-space />
+        <q-badge
+          color="green"
+          text-color="yellow"
+          :label="'Онлайн: ' + playersCount"
+        />
       </q-toolbar>
     </q-header>
 
