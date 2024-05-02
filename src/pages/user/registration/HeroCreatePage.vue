@@ -15,7 +15,7 @@
                 :rules="[
                   () =>
                     !formValidate.name.$invalid ||
-                    'Имя не может быть более 20 символов',
+                    validateMessage(formValidate.name),
                 ]"
               />
               <q-select
@@ -25,31 +25,33 @@
                 outlined
                 lazy-rules
                 :rules="[
-                  () => !formValidate.sex.$invalid || 'Необходимо выбрать пол',
+                  () =>
+                    !formValidate.sex.$invalid ||
+                    validateMessage(formValidate.sex),
                 ]"
               />
               <q-select
                 v-model="formData.first_attribute"
                 :options="optionsAttribute"
-                label="Основная характеристика"
+                label="Дополнительный первичный атрибут"
                 outlined
                 lazy-rules
                 :rules="[
                   () =>
                     !formValidate.first_attribute.$invalid ||
-                    'Необходимо выбрать характеристику',
+                    validateMessage(formValidate.first_attribute),
                 ]"
               />
               <q-select
                 v-model="formData.second_attribute"
                 :options="optionsAttribute"
-                label="Второстепенная характеристика"
+                label="Дополнительный вторичный атрибут"
                 outlined
                 lazy-rules
                 :rules="[
                   () =>
                     !formValidate.second_attribute.$invalid ||
-                    'Необходимо выбрать характеристику',
+                    validateMessage(formValidate.second_attribute),
                 ]"
               />
               <q-select
@@ -61,7 +63,7 @@
                 :rules="[
                   () =>
                     !formValidate.element.$invalid ||
-                    'Необходимо выбрать стихию',
+                    validateMessage(formValidate.element),
                 ]"
               />
               <div class="flex justify-center items-center">
@@ -79,6 +81,20 @@
       </div>
     </div>
   </q-page>
+  <q-dialog v-model="dialogHelp">
+    <q-card>
+      <q-toolbar>
+        <q-avatar>
+          <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg" alt="error" />
+        </q-avatar>
+        <q-toolbar-title>
+          <span class="text-weight-bold">Помощь по созданию персонажа</span>
+        </q-toolbar-title>
+        <q-btn flat round dense icon="close" v-close-popup />
+      </q-toolbar>
+      <q-card-section> ТЕКСТ </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <style scoped lang="sass">
@@ -90,19 +106,22 @@
 
 <script>
 import { ref, computed } from "vue";
-import { Loading, Notify, Cookies } from "quasar";
-import { api } from "boot/axios";
-import { useVuelidate, required, maxLength } from "boot/vuelidate";
-import { useRouter } from "vue-router";
-import { useUserStore } from "stores/user";
+import { Loading, Notify } from "quasar";
+import {
+  useVuelidate,
+  required,
+  minLength,
+  maxLength,
+  helpers,
+} from "boot/vuelidate";
 import { useGlobalStore } from "stores/global";
 
 export default {
-  name: "UserRegistrationHeroPage",
+  name: "UserRegistrationHeroCreatePage",
   setup() {
-    const $router = useRouter();
     const storeGlobal = useGlobalStore();
-    const storeuser = useUserStore();
+
+    const dialogHelp = ref(false);
 
     const formData = ref({
       name: "",
@@ -118,17 +137,52 @@ export default {
 
     const rules = computed(() => ({
       name: {
-        required,
-        max: maxLength(ref(20)),
+        required: helpers.withMessage("Необходимо заполнить поле. ", required),
+        min: helpers.withMessage(
+          ({ $pending, $invalid, $params, $model }) =>
+            `Длина имени не может быть менее ${$params.min} символов. `,
+          minLength(4),
+        ),
+        max: helpers.withMessage(
+          ({ $pending, $invalid, $params, $model }) =>
+            `Длина имени не может быть более ${$params.max} символов. `,
+          maxLength(20),
+        ),
       },
       sex: {
-        required,
+        required: helpers.withMessage("Необходимо заполнить поле.", required),
+      },
+      first_attribute: {
+        required: helpers.withMessage("Необходимо заполнить поле.", required),
+      },
+      second_attribute: {
+        required: helpers.withMessage("Необходимо заполнить поле.", required),
+      },
+      element: {
+        required: helpers.withMessage("Необходимо заполнить поле.", required),
       },
     }));
 
     const form = ref();
 
     const formValidate = useVuelidate(rules, formData);
+
+    const validateMessage = (value) => {
+      try {
+        let message = "";
+        value.$silentErrors.forEach((error) => {
+          if (error.$message.value != undefined) {
+            message += error.$message.value;
+          } else {
+            message += error.$message;
+          }
+        });
+
+        return message;
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
     const onCreate = function () {
       Loading.show();
@@ -155,8 +209,10 @@ export default {
       optionsAttribute,
       optionsElement,
       formValidate,
+      validateMessage,
       form,
       onCreate,
+      dialogHelp,
     };
   },
 };

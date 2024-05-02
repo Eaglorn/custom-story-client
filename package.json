@@ -26,12 +26,12 @@
     "radash": "^12.1.0",
     "socket.io-client": "4.7.5",
     "validator": "^13.11.0",
-    "vue": "^3.4.25",
+    "vue": "^3.4.26",
     "vue-client-recaptcha": "^1.1.5",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.8.3",
+    "@quasar/app-vite": "^1.8.5",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",

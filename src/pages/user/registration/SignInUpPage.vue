@@ -1,7 +1,7 @@
 <template>
   <q-page class="row justify-center items-center">
     <div class="q-pa-md flex justify-center">
-      <div class="q-gutter-md flex justify-center" style="width: 500px">
+      <div class="q-gutter-md flex justify-center" style="width: 600px">
         <q-card>
           <q-card-section>
             <q-form ref="form">
@@ -14,7 +14,8 @@
                 lazy-rules
                 :rules="[
                   () =>
-                    !formValidate.email.$invalid || 'Не корректно введён email',
+                    !formValidate.email.$invalid ||
+                    validateMessage(formValidate.email),
                 ]"
               />
               <q-input
@@ -27,7 +28,7 @@
                 :rules="[
                   () =>
                     !formValidate.password.$invalid ||
-                    'Не корректно введён пароль',
+                    validateMessage(formValidate.password),
                 ]"
               >
                 <template v-slot:append>
@@ -46,7 +47,7 @@
                 :rules="[
                   () =>
                     !formValidate.recaptcha.$invalid ||
-                    'Не корректно введён текст',
+                    validateMessage(formValidate.recaptcha),
                 ]"
                 outlined
                 label="Введите текст указанный на картинке"
@@ -75,11 +76,11 @@
                         Обновить Капчу
                       </q-tooltip>
                     </q-btn>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div style="width: 200px"></div>
                   </template>
                 </VueClientRecaptcha>
               </q-card>
-              <div class="flex justify-center items-center">
+              <div>
                 <q-btn
                   class="form-button shadow-2"
                   style="width: 200px"
@@ -87,8 +88,6 @@
                   label="Войти"
                   @click="onAuth"
                 />
-              </div>
-              <div class="flex justify-center items-center">
                 <q-btn
                   class="form-button shadow-2"
                   style="width: 200px"
@@ -106,15 +105,13 @@
 </template>
 
 <style scoped lang="sass">
-.form-input, .form-button
-  margin-top: 10px
-  margin-bottom: 10px
-  width: 400px
+.form-input, .form-button, .form-recaptcha
+  margin-top: 25px
+  margin-bottom: 25px
 
-.form-recaptcha
-  margin-top: 10px
-  margin-bottom: 10px
-  width: 400px
+.form-button
+  margin-left: 15px
+  margin-right: 15px
 </style>
 
 <script>
@@ -123,7 +120,14 @@ import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
 import VueClientRecaptcha from "vue-client-recaptcha";
 import { useRouter } from "vue-router";
-import { useVuelidate, required, maxLength } from "boot/vuelidate";
+import { isEmail } from "boot/validator";
+import {
+  useVuelidate,
+  required,
+  minLength,
+  maxLength,
+  helpers,
+} from "boot/vuelidate";
 
 import { useGlobalStore } from "stores/global";
 import { useUserStore } from "stores/user";
@@ -142,60 +146,87 @@ export default defineComponent({
 
     const isPwd = ref(true);
 
-    /*const isValidPassword = function () {
-      const passwordPattern =
-        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
-      return (
-        passwordPattern.test(formPassword.value) ||
-        "Пароль должен состоять не менее чем из 8 символов, " +
-          "хотя бы одна заглавная латинская буква, " +
-          "хотя бы одна строчная латинская буква, " +
-          "как минимум из одной цифры, " +
-          "хотя бы один специальный символ."
-      );
-    };*/
-
     const recaptchaText = ref("");
     const recaptchaValue = ref("");
     const recaptchaResult = ref(false);
 
     const mailValidate = (value) => {
-      const emailPattern =
-        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      return emailPattern.test(value);
+      return isEmail(value);
     };
-
-    const passwordValidate = (value) => {
-      const passwordPattern =
-        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
-      return passwordPattern.test(value);
-    };
-
     const recaptchaValidate = (value) => {
       return value == recaptchaValue.value;
     };
 
     const rules = computed(() => ({
       email: {
-        required,
-        max: maxLength(ref(40)),
-        mailValidate,
+        required: helpers.withMessage("Необходимо заполнить поле. ", required),
+        min: helpers.withMessage(
+          ({ $pending, $invalid, $params, $model }) =>
+            `Электронный почтовый ящик не может быть менее ${$params.min} символов. `,
+          minLength(5),
+        ),
+        max: helpers.withMessage(
+          ({ $pending, $invalid, $params, $model }) =>
+            `Электронный почтовый ящик не может превышать ${$params.max} символов. `,
+          maxLength(40),
+        ),
+        mailValidate: helpers.withMessage(
+          "Не корректно ввведён электронный почтовый ящик. ",
+          mailValidate,
+        ),
       },
       password: {
-        required,
-        max: maxLength(ref(16)),
-        passwordValidate,
+        required: helpers.withMessage("Необходимо заполнить поле. ", required),
+        min: helpers.withMessage(
+          ({ $pending, $invalid, $params, $model }) =>
+            `Пароль не может быть менее ${$params.min} символов. `,
+          minLength(8),
+        ),
+        max: helpers.withMessage(
+          ({ $pending, $invalid, $params, $model }) =>
+            `Пароль не может превышать ${$params.max} символов. `,
+          maxLength(16),
+        ),
       },
       recaptcha: {
-        required,
-        max: maxLength(ref(6)),
-        recaptchaValidate,
+        required: helpers.withMessage("Необходимо заполнить поле. ", required),
+        min: helpers.withMessage(
+          ({ $pending, $invalid, $params, $model }) =>
+            `Длина кода капчи не может быть менее ${$params.min} символов. `,
+          minLength(6),
+        ),
+        max: helpers.withMessage(
+          ({ $pending, $invalid, $params, $model }) =>
+            `Длина кода капчи не может превышать ${$params.max} символов. `,
+          maxLength(6),
+        ),
+        recaptchaValidate: helpers.withMessage(
+          "Не корректно введена капча. ",
+          recaptchaValidate,
+        ),
       },
     }));
 
     const form = ref();
 
     const formValidate = useVuelidate(rules, formData);
+
+    const validateMessage = (value) => {
+      try {
+        let message = "";
+        value.$silentErrors.forEach((error) => {
+          if (error.$message.value != undefined) {
+            message += error.$message.value;
+          } else {
+            message += error.$message;
+          }
+        });
+
+        return message;
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
     const getCaptchaCode = (value) => {
       recaptchaText.value = "";
@@ -354,6 +385,7 @@ export default defineComponent({
       formData,
       form,
       formValidate,
+      validateMessage,
       isPwd,
       recaptchaText,
       recaptchaValue,

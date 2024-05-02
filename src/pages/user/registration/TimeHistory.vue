@@ -70,7 +70,7 @@ import("./assets/TimeHistory.json").then((data) => {
 });
 
 export default {
-  name: "UserRegistrationHeroPage",
+  name: "UserRegistrationTimeHistory",
   setup() {
     const $router = useRouter();
     const storeGlobal = useGlobalStore();

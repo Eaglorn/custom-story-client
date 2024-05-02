@@ -35,6 +35,7 @@ module.exports = configure(function (/* ctx */) {
       "randomcoord",
       "luxon",
       "radash",
+      "validator",
       "vuelidate",
       "vueuse",
     ],
