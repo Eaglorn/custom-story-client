@@ -104,7 +104,7 @@
   width: 400px
 </style>
 
-<script>
+<script setup>
 import { ref, computed } from "vue";
 import { Loading, Notify } from "quasar";
 import {
@@ -116,105 +116,92 @@ import {
 } from "boot/vuelidate";
 import { useGlobalStore } from "stores/global";
 
-export default {
+defineOptions({
   name: "UserRegistrationHeroCreatePage",
-  setup() {
-    const storeGlobal = useGlobalStore();
+});
 
-    const dialogHelp = ref(false);
+const storeGlobal = useGlobalStore();
 
-    const formData = ref({
-      name: "",
-      sex: "",
-      first_attribute: "",
-      second_attribute: "",
-      element: "",
+const dialogHelp = ref(false);
+
+const formData = ref({
+  name: "",
+  sex: "",
+  first_attribute: "",
+  second_attribute: "",
+  element: "",
+});
+
+const optionsSex = ["Муж", "Жен"];
+const optionsAttribute = ["Сила", "Выносливость", "Ловкость", "Разум"];
+const optionsElement = ["Огонь", "Воздух", "Вода", "Земля", "Тьма", "Свет"];
+
+const rules = computed(() => ({
+  name: {
+    required: helpers.withMessage("Необходимо заполнить поле. ", required),
+    min: helpers.withMessage(
+      ({ $pending, $invalid, $params, $model }) =>
+        `Длина имени не может быть менее ${$params.min} символов. `,
+      minLength(4),
+    ),
+    max: helpers.withMessage(
+      ({ $pending, $invalid, $params, $model }) =>
+        `Длина имени не может быть более ${$params.max} символов. `,
+      maxLength(20),
+    ),
+  },
+  sex: {
+    required: helpers.withMessage("Необходимо заполнить поле.", required),
+  },
+  first_attribute: {
+    required: helpers.withMessage("Необходимо заполнить поле.", required),
+  },
+  second_attribute: {
+    required: helpers.withMessage("Необходимо заполнить поле.", required),
+  },
+  element: {
+    required: helpers.withMessage("Необходимо заполнить поле.", required),
+  },
+}));
+
+const form = ref();
+
+const formValidate = useVuelidate(rules, formData);
+
+const validateMessage = (value) => {
+  try {
+    let message = "";
+    value.$silentErrors.forEach((error) => {
+      if (error.$message.value != undefined) {
+        message += error.$message.value;
+      } else {
+        message += error.$message;
+      }
     });
 
-    const optionsSex = ["Муж", "Жен"];
-    const optionsAttribute = ["Сила", "Выносливость", "Ловкость", "Разум"];
-    const optionsElement = ["Огонь", "Воздух", "Вода", "Земля", "Тьма", "Свет"];
+    return message;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-    const rules = computed(() => ({
-      name: {
-        required: helpers.withMessage("Необходимо заполнить поле. ", required),
-        min: helpers.withMessage(
-          ({ $pending, $invalid, $params, $model }) =>
-            `Длина имени не может быть менее ${$params.min} символов. `,
-          minLength(4),
-        ),
-        max: helpers.withMessage(
-          ({ $pending, $invalid, $params, $model }) =>
-            `Длина имени не может быть более ${$params.max} символов. `,
-          maxLength(20),
-        ),
-      },
-      sex: {
-        required: helpers.withMessage("Необходимо заполнить поле.", required),
-      },
-      first_attribute: {
-        required: helpers.withMessage("Необходимо заполнить поле.", required),
-      },
-      second_attribute: {
-        required: helpers.withMessage("Необходимо заполнить поле.", required),
-      },
-      element: {
-        required: helpers.withMessage("Необходимо заполнить поле.", required),
-      },
-    }));
-
-    const form = ref();
-
-    const formValidate = useVuelidate(rules, formData);
-
-    const validateMessage = (value) => {
-      try {
-        let message = "";
-        value.$silentErrors.forEach((error) => {
-          if (error.$message.value != undefined) {
-            message += error.$message.value;
-          } else {
-            message += error.$message;
-          }
-        });
-
-        return message;
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    const onCreate = function () {
-      Loading.show();
-      if (formValidate.value.$invalid) {
-        form.value.submit();
-        Notify.create({
-          progress: true,
-          color: "warning",
-          position: "top",
-          message: "Неправильно заполнены поля в форме",
-          icon: "warning",
-          timeout: storeGlobal.timeout.api.error.low,
-          textColor: "black",
-        });
-        Loading.hide();
-      } else {
-        Loading.hide();
-      }
-    };
-
-    return {
-      formData,
-      optionsSex,
-      optionsAttribute,
-      optionsElement,
-      formValidate,
-      validateMessage,
-      form,
-      onCreate,
-      dialogHelp,
-    };
-  },
+const onCreate = function () {
+  Loading.show();
+  if (formValidate.value.$invalid) {
+    form.value.submit();
+    Notify.create({
+      progress: true,
+      color: "warning",
+      position: "top",
+      message: "Неправильно заполнены поля в форме",
+      icon: "warning",
+      timeout: storeGlobal.timeout.api.error.low,
+      textColor: "black",
+    });
+    Loading.hide();
+  } else {
+    Loading.hide();
+  }
 };
 </script>
 

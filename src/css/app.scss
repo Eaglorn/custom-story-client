@@ -4,6 +4,12 @@
 @import "fontawesome/css/sharp-solid.css";
 @import "fontawesome/css/sharp-thin.css";
 
+@font-face {
+  font-family: allods;
+  src: url(./fonts/Allods.ttf);
+}
+
 body {
   background-color: rgb(161, 161, 161);
+  font-family: "allods";
 }

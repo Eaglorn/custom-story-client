@@ -46,21 +46,20 @@ module.exports = configure(function (/* ctx */) {
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
-      // 'mdi-v5',
+      // 'mdi-v7',
       // 'fontawesome-v6',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
-
-      "roboto-font", // optional, you are not bound to it
+      // 'roboto-font', // optional, you are not bound to it
       "material-icons", // optional, you are not bound to it
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       target: {
-        browser: ["es2022", "chrome115"],
+        browser: ["es2019", "edge88", "firefox78", "chrome87", "safari13.1"],
         node: "node20",
       },
 
@@ -69,21 +68,31 @@ module.exports = configure(function (/* ctx */) {
       // vueDevtools,
       // vueOptionsAPI: false,
 
-      rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
+      // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
       // publicPath: '/',
       // analyze: true,
       // env: {},
       // rawDefine: {}
       // ignorePublicFolder: true,
-      minify: true,
+      // minify: false,
       // polyfillModulePreload: true,
       // distDir
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
 
-      vitePlugins: [],
+      vitePlugins: [
+        [
+          "vite-plugin-checker",
+          {
+            eslint: {
+              lintCommand: 'eslint "./**/*.{js,mjs,cjs,vue}"',
+            },
+          },
+          { server: false },
+        ],
+      ],
 
       chainWebpack: (chain) => {},
     },

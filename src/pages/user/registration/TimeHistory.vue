@@ -2,18 +2,18 @@
   <q-page class="page">
     <div class="q-pa-md flex justify-center">
       <div class="q-gutter-md flex justify-center" style="width: 700px">
-        <q-timeline color="secondary">
+        <q-timeline color="secondary" class="timeline">
           <q-timeline-entry heading body="История мира" />
-          <q-timeline-entry title="Начало 2026">
+          <q-timeline-entry title="2026 (начало)">
             {{ pageText._2026_start }}
           </q-timeline-entry>
-          <q-timeline-entry title="Середина 2026">
+          <q-timeline-entry title="2026 (середина)">
             {{ pageText._2026_middle }}
           </q-timeline-entry>
-          <q-timeline-entry title="Конец 2026">
+          <q-timeline-entry title="2026 (конец)">
             {{ pageText._2026_end }}
           </q-timeline-entry>
-          <q-timeline-entry title="Середина 2027">
+          <q-timeline-entry title="2027 (середина)">
             {{ pageText._2027_middle }}
           </q-timeline-entry>
           <q-timeline-entry title="2028">
@@ -22,10 +22,10 @@
           <q-timeline-entry title="2030">
             {{ pageText._2030 }}
           </q-timeline-entry>
-          <q-timeline-entry title="Начало 2031">
+          <q-timeline-entry title="2031 (начало)">
             {{ pageText._2031_start }}
           </q-timeline-entry>
-          <q-timeline-entry title="Конец 2031">
+          <q-timeline-entry title="2031 (конец)">
             {{ pageText._2031_end }}
           </q-timeline-entry>
           <q-timeline-entry title="2036">
@@ -53,34 +53,28 @@
   </q-page>
 </template>
 
-<style scoped lang="sass"></style>
+<style scoped lang="sass">
+.timeline
+  font-size: 22px !important
+</style>
 
-<script>
+<script setup>
 import { ref } from "vue";
-import { Loading, Notify, Cookies } from "quasar";
-import { api } from "boot/axios";
 import { useRouter } from "vue-router";
-import { useUserStore } from "stores/user";
-import { useGlobalStore } from "stores/global";
 
-var pageText = ref({});
+defineOptions({
+  name: "UserRegistrationTimeHistory",
+});
+
+const pageText = ref({});
 
 import("./assets/TimeHistory.json").then((data) => {
   pageText.value = data.default;
 });
 
-export default {
-  name: "UserRegistrationTimeHistory",
-  setup() {
-    const $router = useRouter();
-    const storeGlobal = useGlobalStore();
-    const storeUser = useUserStore();
+const $router = useRouter();
 
-    const createHero = function () {
-      $router.push("UserRegistrationHeroCreate");
-    };
-
-    return { createHero, pageText };
-  },
+const createHero = function () {
+  $router.push("UserRegistrationHeroCreate");
 };
 </script>

@@ -5,8 +5,9 @@
         <q-toolbar-title> CustomStory v{{ version }} </q-toolbar-title>
         <q-space />
         <q-badge
+          class="online-badge"
           color="green"
-          text-color="yellow"
+          text-color="accent"
           :label="'Онлайн: ' + playersCount"
         />
       </q-toolbar>
@@ -18,20 +19,20 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, computed } from "vue";
+<style scoped lang="sass">
+.online-badge
+  font-size: 16px
+</style>
+
+<script setup>
+import { computed } from "vue";
 import { useGlobalStore } from "stores/global";
 
-export default defineComponent({
+defineOptions({
   name: "MainLayout",
-  setup() {
-    const storeGlobal = useGlobalStore();
-
-    const playersCount = computed(() => storeGlobal.playersCount);
-
-    const version = storeGlobal.app.version;
-
-    return { version, playersCount };
-  },
 });
+
+const storeGlobal = useGlobalStore();
+const playersCount = computed(() => storeGlobal.playersCount);
+const version = storeGlobal.app.version;
 </script>

@@ -41,65 +41,61 @@
   font-size: 20px
 </style>
 
-<script>
+<script setup>
 import { ref } from "vue";
-import { Loading, Notify, Cookies } from "quasar";
+import { Loading, Notify } from "quasar";
 import { api } from "boot/axios";
 import { useRouter } from "vue-router";
 import { useUserStore } from "stores/user";
 import { useGlobalStore } from "stores/global";
 
-export default {
+defineOptions({
   name: "UserRegistrationCodePage",
-  setup() {
-    const $router = useRouter();
-    const storeGlobal = useGlobalStore();
-    const storeUser = useUserStore();
+});
 
-    const formCode = ref("");
+const $router = useRouter();
+const storeGlobal = useGlobalStore();
+const storeUser = useUserStore();
 
-    const endRegistration = function () {
-      Loading.show();
+const formCode = ref("");
 
-      api({
-        method: "post",
-        url: storeGlobal.getAjaxUri("user/registration/check"),
-        data: {
-          email: storeUser.email,
-          code: formCode.value,
-        },
-        timeout: storeGlobal.timeout.api.response,
-        responseType: "json",
-      })
-        .then((response) => {
-          Loading.hide();
-          if (response.data.success === true) {
-            $router.push("UserRegistrationTimeHistory");
-          } else {
-            Notify.create({
-              progress: true,
-              color: "negative",
-              position: "top",
-              message: "Не верно введён код",
-              icon: "report_problem",
-              timeout: storeGlobal.timeout.api.error.high,
-            });
-          }
-        })
-        .catch(function () {
-          Loading.hide();
-          Notify.create({
-            color: "negative",
-            position: "top",
-            message:
-              "Нет соединения с сервером. Попробуйте отправить код ещё раз",
-            icon: "report_problem",
-            timeout: storeGlobal.timeout.api.error.high,
-          });
+const endRegistration = function () {
+  Loading.show();
+
+  api({
+    method: "post",
+    url: storeGlobal.getAjaxUri("user/registration/check"),
+    data: {
+      email: storeUser.email,
+      code: formCode.value,
+    },
+    timeout: storeGlobal.timeout.api.response,
+    responseType: "json",
+  })
+    .then((response) => {
+      Loading.hide();
+      if (response.data.success === true) {
+        $router.push("UserRegistrationTimeHistory");
+      } else {
+        Notify.create({
+          progress: true,
+          color: "negative",
+          position: "top",
+          message: "Не верно введён код",
+          icon: "report_problem",
+          timeout: storeGlobal.timeout.api.error.high,
         });
-    };
-
-    return { endRegistration, formCode };
-  },
+      }
+    })
+    .catch(function () {
+      Loading.hide();
+      Notify.create({
+        color: "negative",
+        position: "top",
+        message: "Нет соединения с сервером. Попробуйте отправить код ещё раз",
+        icon: "report_problem",
+        timeout: storeGlobal.timeout.api.error.high,
+      });
+    });
 };
 </script>
