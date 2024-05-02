@@ -7,7 +7,8 @@
           <span>
             На ваш электронный почтовый ящик выслано сообщение с кодом. Для
             подтверждения регистрации необходимо в находящееся ниже поле ввести
-            полученный код. Код существует 60 минут.
+            полученный код. Код возможно ввести в течении 60 минут, иначе
+            регистрируемый почтовый ящик будет высвобожден.
           </span>
         </div>
         <br />
@@ -64,7 +65,7 @@ const endRegistration = function () {
 
   api({
     method: "post",
-    url: storeGlobal.getAjaxUri("user/registration/check"),
+    url: storeGlobal.getAjaxUri("user/registration/check/code"),
     data: {
       email: storeUser.email,
       code: formCode.value,

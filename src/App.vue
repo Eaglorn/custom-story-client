@@ -41,7 +41,17 @@ storeGlobal.socket.on("RemovePlayersCount", (data) => {
   storeGlobal.playersCount--;
 });
 
-//$router.push("UserSignInUp");
-$router.push("UserRegistrationTimeHistory");
-//$router.push("UserRegistrationHeroCreate");
+const page = 1;
+switch (page) {
+  case 1: {
+    $router.push("UserRegistrationTimeHistory");
+    break;
+  }
+  case 2: {
+    $router.push("UserRegistrationHeroCreate");
+    break;
+  }
+  default:
+    $router.push("UserSignInUp");
+}
 </script>

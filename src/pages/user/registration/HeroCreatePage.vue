@@ -4,6 +4,22 @@
       <div class="q-gutter-md flex justify-center" style="width: 500px">
         <q-card>
           <q-card-section>
+            <q-btn
+              fab
+              color="primary"
+              icon="fa-solid fa-question"
+              class="absolute"
+              style="top: 0; right: 0; transform: translate3d(50%, -50%, 0)"
+              @click="dialogHelp = !dialogHelp"
+            >
+              <q-tooltip
+                class="positive"
+                :offset="[-10, -10]"
+                style="font-size: 16px !important"
+              >
+                Помощь по созданию персонажа
+              </q-tooltip>
+            </q-btn>
             <q-form ref="form">
               <q-input
                 class="form-input"
@@ -81,18 +97,44 @@
       </div>
     </div>
   </q-page>
-  <q-dialog v-model="dialogHelp">
+  <q-dialog v-model="dialogHelp" :backdrop-filter="backdropFilter">
     <q-card>
       <q-toolbar>
         <q-avatar>
-          <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg" alt="error" />
+          <i class="fa-solid fa-person-rays fa-2x" />
         </q-avatar>
         <q-toolbar-title>
           <span class="text-weight-bold">Помощь по созданию персонажа</span>
         </q-toolbar-title>
         <q-btn flat round dense icon="close" v-close-popup />
       </q-toolbar>
-      <q-card-section> ТЕКСТ </q-card-section>
+      <q-card-section class="dialog-body">
+        <br />
+        <b>Сила</b> — это способность к физическим нагрузкам и нанесению урона в
+        ближнем бою. <br /><br />
+        <b>Выносливость</b> — это способность выдерживать длительные нагрузки и
+        быстро восстанавливаться после ранений. Персонаж с высокой Выносливостью
+        может дольше сражаться и выдерживать более суровые условия окружающей
+        среды. <br /><br />
+        <b>Ловкость</b> — это гибкость, скорость и координация персонажа.
+        <br /><br />
+        <b>Разум</b> — это умственные способности персонажа, его способность к
+        обучению, анализу и решению сложных задач. <br /><br />
+        В каждом действии могут учавствовать до 4 характеристик, в разных
+        пропорциях.
+        <br /><br />
+        Каждое действие персонажа может зависеть от разных пропорций четырёх
+        основных характеристик: силы, выносливости, ловкости и разума.
+        <br /><br />
+        При выполнении действий будут расти характеристики, которые в них
+        задействованы. Чем выше становится характеристика, тем сложнее её
+        повышать.
+        <br /><br />
+        Выберите две характеристики: основную и дополнительную. Именно на эти
+        характеристики вы делали упор при обучении. Также определитесь со
+        стихией, с которой вы начнёте исследование миров.
+        <br /><br />
+      </q-card-section>
     </q-card>
   </q-dialog>
 </template>
@@ -102,6 +144,9 @@
   margin-top: 10px
   margin-bottom: 10px
   width: 400px
+
+.dialog-body
+  font-size: 20px
 </style>
 
 <script setup>
@@ -123,6 +168,7 @@ defineOptions({
 const storeGlobal = useGlobalStore();
 
 const dialogHelp = ref(false);
+const backdropFilter = ref("blur(2px) brightness(90%)");
 
 const formData = ref({
   name: "",
@@ -134,7 +180,7 @@ const formData = ref({
 
 const optionsSex = ["Муж", "Жен"];
 const optionsAttribute = ["Сила", "Выносливость", "Ловкость", "Разум"];
-const optionsElement = ["Огонь", "Воздух", "Вода", "Земля", "Тьма", "Свет"];
+const optionsElement = ["Огонь", "Воздух", "Вода", "Земля"];
 
 const rules = computed(() => ({
   name: {
