@@ -41,7 +41,7 @@ storeGlobal.socket.on("RemovePlayersCount", (data) => {
   storeGlobal.playersCount--;
 });
 
-const page = 1;
+const page = 0;
 switch (page) {
   case 1: {
     $router.push("UserRegistrationTimeHistory");
