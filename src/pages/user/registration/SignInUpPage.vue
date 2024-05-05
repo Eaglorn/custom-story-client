@@ -262,19 +262,40 @@ const onAuth = function () {
     })
       .then((response) => {
         if (response.data.success === true) {
-          storeUser.$patch({
-            auth: true,
-            type: response.data.type,
-          });
-          Cookies.set("email", formEmail.value, {
-            expires: 1,
-            secure: true,
-          });
-          Cookies.set("password", formPassword.value, {
-            expires: 3,
-            secure: true,
-          });
-          Loading.hide();
+          if (response.data.registration === true) {
+            storeUser.$patch({
+              email: formData.value.email,
+              password: formData.value.password,
+            });
+            switch (response.data.type) {
+              case "write_code": {
+                $router.push("UserRegistrationCode");
+                break;
+              }
+              case "history_read": {
+                $router.push("UserRegistrationTimeHistory");
+                break;
+              }
+              case "hero_create": {
+                $router.push("UserRegistrationHeroCreate");
+                break;
+              }
+            }
+          } else {
+            storeUser.$patch({
+              auth: true,
+              type: response.data.type,
+            });
+            Cookies.set("email", formEmail.value, {
+              expires: 1,
+              secure: true,
+            });
+            Cookies.set("password", formPassword.value, {
+              expires: 3,
+              secure: true,
+            });
+            Loading.hide();
+          }
         } else {
           if (response.data.email === false) {
             Notify.create({
