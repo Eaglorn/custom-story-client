@@ -116,7 +116,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { Loading, Notify, Cookies } from "quasar";
+import { Loading, Notify, SessionStorage, Cookies } from "quasar";
 import { api } from "boot/axios";
 import VueClientRecaptcha from "vue-client-recaptcha";
 import { useRouter } from "vue-router";
@@ -281,19 +281,15 @@ const onAuth = function () {
                 break;
               }
             }
+            Loading.hide();
           } else {
             storeUser.$patch({
               auth: true,
               type: response.data.type,
             });
-            Cookies.set("email", formEmail.value, {
-              expires: 1,
-              secure: true,
-            });
-            Cookies.set("password", formPassword.value, {
-              expires: 3,
-              secure: true,
-            });
+            SessionStorage.set("email", formData.value);
+            SessionStorage.set("password", formData.value);
+
             Loading.hide();
           }
         } else {
