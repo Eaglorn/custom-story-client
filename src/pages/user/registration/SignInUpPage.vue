@@ -116,7 +116,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { Loading, Notify, SessionStorage, Cookies } from "quasar";
+import { Loading, Notify, SessionStorage } from "quasar";
 import { api } from "boot/axios";
 import VueClientRecaptcha from "vue-client-recaptcha";
 import { useRouter } from "vue-router";
@@ -261,8 +261,8 @@ const onAuth = function () {
       responseType: "json",
     })
       .then((response) => {
-        if (response.data.success === true) {
-          if (response.data.registration === true) {
+        if (!response.data.registration) {
+          if (response.data.success) {
             storeUser.$patch({
               email: formData.value.email,
               password: formData.value.password,
@@ -281,43 +281,46 @@ const onAuth = function () {
                 break;
               }
             }
-            Loading.hide();
-          } else {
-            storeUser.$patch({
-              auth: true,
-              type: response.data.type,
-            });
-            SessionStorage.set("email", formData.value);
-            SessionStorage.set("password", formData.value);
-
-            Loading.hide();
-          }
-        } else {
-          if (response.data.email === false) {
+          } else if (!response.data.password) {
             Notify.create({
               progress: true,
               color: "negative",
               position: "top",
-              message:
-                "Введённый электронный почтовый ящик не зарегистрирован.",
-              icon: "report_problem",
-              timeout: storeGlobal.timeout.api.error.low,
-            });
-          } else if (response.data.password === false) {
-            Notify.create({
-              progress: true,
-              color: "negative",
-              position: "top",
-              message: "Неверно набран пароль.",
+              message: "Не верно введён пароль.",
               icon: "report_problem",
               timeout: storeGlobal.timeout.api.error.low,
             });
           }
-          Loading.hide();
+        } else if (response.data.success) {
+          storeUser.$patch({
+            auth: true,
+            type: response.data.type,
+          });
+          SessionStorage.set("email", formData.value);
+          SessionStorage.set("password", formData.value);
+          $router.push("UserProfile");
+        } else if (!response.data.email) {
+          Notify.create({
+            progress: true,
+            color: "negative",
+            position: "top",
+            message: "Введёный почтовый ящик не зарегистрирован.",
+            icon: "report_problem",
+            timeout: storeGlobal.timeout.api.error.low,
+          });
+        } else if (!response.data.password) {
+          Notify.create({
+            progress: true,
+            color: "negative",
+            position: "top",
+            message: "Не верно введён пароль.",
+            icon: "report_problem",
+            timeout: storeGlobal.timeout.api.error.low,
+          });
         }
+        Loading.hide();
       })
       .catch(function () {
-        Loading.hide();
         Notify.create({
           color: "negative",
           position: "top",
@@ -326,6 +329,7 @@ const onAuth = function () {
           icon: "report_problem",
           timeout: storeGlobal.timeout.api.error.high,
         });
+        Loading.hide();
       });
   }
 };

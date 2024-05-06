@@ -20,6 +20,10 @@ const routes = [
         path: "UserRegistrationHeroCreate",
         component: () => import("pages/user/registration/HeroCreatePage.vue"),
       },
+      {
+        path: "UserProfile",
+        component: () => import("pages/user/UserProfilePage.vue"),
+      },
     ],
   },
 
