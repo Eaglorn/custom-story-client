@@ -243,7 +243,7 @@ const onAuth = function () {
       color: "warning",
       position: "top",
       message: "Неправильно заполнены поля в форме",
-      icon: "warning",
+      icon: "fa-solid fa-message-exclamation",
       timeout: storeGlobal.timeout.api.error.low,
       textColor: "black",
     });
@@ -286,8 +286,9 @@ const onAuth = function () {
               color: "warning",
               position: "top",
               message: "Не верно введён пароль.",
-              icon: "report_problem",
+              icon: "fa-solid fa-message-exclamation",
               timeout: storeGlobal.timeout.api.error.low,
+              textColor: "black",
             });
           }
         } else if (response.data.success) {
@@ -305,8 +306,9 @@ const onAuth = function () {
             position: "top",
             message:
               "Учётная запись с введёным почтовым ящиком не зарегистрирована.",
-            icon: "report_problem",
+            icon: "fa-solid fa-message-exclamation",
             timeout: storeGlobal.timeout.api.error.low,
+            textColor: "black",
           });
         } else if (!response.data.password) {
           Notify.create({
@@ -314,8 +316,9 @@ const onAuth = function () {
             color: "warning",
             position: "top",
             message: "Не верно введён пароль.",
-            icon: "report_problem",
+            icon: "fa-solid fa-message-exclamation",
             timeout: storeGlobal.timeout.api.error.low,
+            textColor: "black",
           });
         }
         Loading.hide();
@@ -326,8 +329,9 @@ const onAuth = function () {
           position: "top",
           message:
             "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
-          icon: "report_problem",
+          icon: "fa-solid fa-circle-exclamation",
           timeout: storeGlobal.timeout.api.error.high,
+          textColor: "black",
         });
         Loading.hide();
       });
@@ -343,7 +347,7 @@ const onReg = function () {
       color: "warning",
       position: "top",
       message: "Неправильно заполнены поля в форме",
-      icon: "warning",
+      icon: "fa-solid fa-message-exclamation",
       textColor: "black",
       timeout: storeGlobal.timeout.api.error.low,
     });
@@ -372,7 +376,7 @@ const onReg = function () {
               position: "top",
               message:
                 "Учётная запись с введённым почтовым ящиком находится на стадии регистрации. Вы ввели неправильно пароль. Если вы забыли пароль, подождите 6 часов. Далее почтовый ящик будет высвобожден и вы сможете начать регистрацию заного.",
-              icon: "warning",
+              icon: "fa-solid fa-message-exclamation",
               textColor: "black",
               timeout: storeGlobal.timeout.api.error.low,
             });
@@ -384,7 +388,7 @@ const onReg = function () {
             position: "top",
             message:
               "Учётная запись с введённым почтовым ящиком уже зарегистрирована.",
-            icon: "warning",
+            icon: "fa-solid fa-message-exclamation",
             textColor: "black",
             timeout: storeGlobal.timeout.api.error.low,
           });
@@ -397,8 +401,9 @@ const onReg = function () {
           position: "top",
           message:
             "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
-          icon: "report_problem",
+          icon: "fa-solid fa-circle-exclamation",
           timeout: storeGlobal.timeout.api.error.high,
+          textColor: "black",
         });
         Loading.hide();
       });
