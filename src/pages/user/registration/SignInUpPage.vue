@@ -255,7 +255,6 @@ const onAuth = function () {
       data: {
         email: formData.value.email,
         password: formData.value.password,
-        socket: storeUser.socket,
       },
       timeout: storeGlobal.timeout.api.response,
       responseType: "json",
@@ -284,7 +283,7 @@ const onAuth = function () {
           } else if (!response.data.password) {
             Notify.create({
               progress: true,
-              color: "negative",
+              color: "warning",
               position: "top",
               message: "Не верно введён пароль.",
               icon: "report_problem",
@@ -302,16 +301,17 @@ const onAuth = function () {
         } else if (!response.data.email) {
           Notify.create({
             progress: true,
-            color: "negative",
+            color: "warning",
             position: "top",
-            message: "Введёный почтовый ящик не зарегистрирован.",
+            message:
+              "Учётная запись с введёным почтовым ящиком не зарегистрирована.",
             icon: "report_problem",
             timeout: storeGlobal.timeout.api.error.low,
           });
         } else if (!response.data.password) {
           Notify.create({
             progress: true,
-            color: "negative",
+            color: "warning",
             position: "top",
             message: "Не верно введён пароль.",
             icon: "report_problem",
@@ -355,32 +355,37 @@ const onReg = function () {
       data: {
         email: formData.value.email,
         password: formData.value.password,
-        socket: storeUser.socket,
       },
       timeout: storeGlobal.timeout.api.response,
       responseType: "json",
     })
       .then((response) => {
-        if (response.data.registration_email === true) {
+        if (response.data.success) {
+          storeUser.email = formData.value.email;
+          storeUser.password = formData.value.password;
+          $router.push("UserRegistrationCode");
+        } else if (response.data.registration) {
+          if (!response.data.password) {
+            Notify.create({
+              progress: true,
+              color: "warning",
+              position: "top",
+              message:
+                "Учётная запись с введённым почтовым ящиком находится на стадии регистрации. Вы ввели неправильно пароль. Если вы забыли пароль, подождите 6 часов. Далее почтовый ящик будет высвобожден и вы сможете начать регистрацию заного.",
+              icon: "warning",
+              textColor: "black",
+              timeout: storeGlobal.timeout.api.error.low,
+            });
+          }
+        } else if (!response.data.email) {
           Notify.create({
             progress: true,
-            color: "negative",
+            color: "warning",
             position: "top",
             message:
-              "Введённый электронный почтовый ящик находится на этапе регистрации. Попробуйте зарегистрироваться под другим электронным почтовым ящиком. Если это вы регистрировали введённый электронный почтовый ящик, попробуйте заного выполнить регистрацию через 60 минут.",
-            icon: "report_problem",
-            timeout: storeGlobal.timeout.api.error.high,
-          });
-        } else if (response.data.success === true) {
-          storeUser.email = formData.value.email;
-          $router.push("UserRegistrationCode");
-        } else {
-          Notify.create({
-            progress: true,
-            color: "negative",
-            position: "top",
-            message: "Введённый электронный почтовый ящик занят",
-            icon: "report_problem",
+              "Учётная запись с введённым почтовым ящиком уже зарегистрирована.",
+            icon: "warning",
+            textColor: "black",
             timeout: storeGlobal.timeout.api.error.low,
           });
         }
