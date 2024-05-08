@@ -62,7 +62,6 @@ const formCode = ref("");
 
 const endRegistration = function () {
   Loading.show();
-
   api({
     method: "post",
     url: storeGlobal.getAjaxUri("user/registration/check/code"),
@@ -97,6 +96,9 @@ const endRegistration = function () {
         icon: "report_problem",
         timeout: storeGlobal.timeout.api.error.high,
       });
+      if (storeGlobal.app.type == "dev") {
+        console.log(err);
+      }
       Loading.hide();
     });
 };

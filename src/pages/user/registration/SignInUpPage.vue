@@ -347,10 +347,10 @@ const onAuth = function () {
           timeout: storeGlobal.timeout.api.error.high,
           textColor: "black",
         });
-        Loading.hide();
         if (storeGlobal.app.type == "dev") {
           console.log(err);
         }
+        Loading.hide();
       });
   }
 };
@@ -443,10 +443,10 @@ const onReg = function () {
           timeout: storeGlobal.timeout.api.error.high,
           textColor: "black",
         });
-        Loading.hide();
         if (storeGlobal.app.type == "dev") {
           console.log(err);
         }
+        Loading.hide();
       });
   }
 };

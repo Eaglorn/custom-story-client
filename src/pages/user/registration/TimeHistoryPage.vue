@@ -97,7 +97,6 @@ const createHero = function () {
     responseType: "json",
   })
     .then((response) => {
-      Loading.hide();
       if (response.data.success === true) {
         $router.push("UserRegistrationHeroCreate");
       } else {
@@ -110,9 +109,9 @@ const createHero = function () {
           timeout: storeGlobal.timeout.api.error.high,
         });
       }
+      Loading.hide();
     })
     .catch(function () {
-      Loading.hide();
       Notify.create({
         color: "negative",
         position: "top",
@@ -120,7 +119,10 @@ const createHero = function () {
         icon: "report_problem",
         timeout: storeGlobal.timeout.api.error.high,
       });
+      if (storeGlobal.app.type == "dev") {
+        console.log(err);
+      }
+      Loading.hide();
     });
-  $router.push("UserRegistrationHeroCreate");
 };
 </script>

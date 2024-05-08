@@ -58,6 +58,8 @@ export const useUserStore = defineStore("user", {
                 $router.push("UserProfile");
                 this.setSocket();
               }
+            } else {
+              $router.push("UserSignInUp");
             }
             Loading.hide();
           })
@@ -75,6 +77,8 @@ export const useUserStore = defineStore("user", {
               console.log(err);
             }
           });
+      } else {
+        $router.push("UserSignInUp");
       }
     },
     onSocket() {
