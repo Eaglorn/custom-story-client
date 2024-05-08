@@ -376,9 +376,28 @@ const onReg = function () {
     })
       .then((response) => {
         if (response.data.success) {
-          storeUser.email = formData.value.email;
-          storeUser.password = formData.value.password;
-          $router.push("UserRegistrationCode");
+          storeUser.$patch({
+            email: formData.value.email,
+            password: formData.value.password,
+          });
+          if (!response.data.registration) {
+            $router.push("UserRegistrationCode");
+          } else {
+            switch (response.data.type) {
+              case "write_code": {
+                $router.push("UserRegistrationCode");
+                break;
+              }
+              case "history_read": {
+                $router.push("UserRegistrationTimeHistory");
+                break;
+              }
+              case "hero_create": {
+                $router.push("UserRegistrationHeroCreate");
+                break;
+              }
+            }
+          }
         } else if (response.data.registration) {
           if (!response.data.password) {
             Notify.create({
