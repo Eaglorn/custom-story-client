@@ -66,7 +66,10 @@
 
 <script setup>
 import { ref } from "vue";
+import { api } from "boot/axios";
 import { useRouter } from "vue-router";
+import { useUserStore } from "stores/user";
+import { useGlobalStore } from "stores/global";
 
 defineOptions({
   name: "UserRegistrationTimeHistory",
@@ -79,8 +82,45 @@ import("./assets/TimeHistory.json").then((data) => {
 });
 
 const $router = useRouter();
+const storeGlobal = useGlobalStore();
+const storeUser = useUserStore();
 
 const createHero = function () {
+  api({
+    method: "post",
+    url: storeGlobal.getAjaxUri("user/registration/history/read"),
+    data: {
+      email: storeUser.email,
+      password: storeUser.password,
+    },
+    timeout: storeGlobal.timeout.api.response,
+    responseType: "json",
+  })
+    .then((response) => {
+      Loading.hide();
+      if (response.data.success === true) {
+        $router.push("UserRegistrationHeroCreate");
+      } else {
+        Notify.create({
+          progress: true,
+          color: "negative",
+          position: "top",
+          message: "Ошибка. Попробуйте заного нажать кнопку.",
+          icon: "report_problem",
+          timeout: storeGlobal.timeout.api.error.high,
+        });
+      }
+    })
+    .catch(function () {
+      Loading.hide();
+      Notify.create({
+        color: "negative",
+        position: "top",
+        message: "Нет соединения с сервером. Попробуйте отправить код ещё раз",
+        icon: "report_problem",
+        timeout: storeGlobal.timeout.api.error.high,
+      });
+    });
   $router.push("UserRegistrationHeroCreate");
 };
 </script>
