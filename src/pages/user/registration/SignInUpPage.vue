@@ -155,10 +155,7 @@ const mailCorrectValidate = (value) => {
   return isEmail(value);
 };
 const mailAlphaNumericValidate = (value) => {
-  return (
-    isAlphanumeric(value, "en-US", { ignore: "@." }) ||
-    isAlphanumeric(value, "ru-RU", { ignore: "@." })
-  );
+  return isAlphanumeric(value, "en-US", { ignore: "@." });
 };
 const recaptchaValidate = (value) => {
   return value == recaptchaValue.value;
@@ -199,7 +196,7 @@ const rules = computed(() => ({
       maxLength(16),
     ),
     passwordValidate: helpers.withMessage(
-      "В пароле могут быть только буквы и цифры. ",
+      "В пароле могут быть только цифры и буквы русского или английского алфавита.",
       passwordValidate,
     ),
   },

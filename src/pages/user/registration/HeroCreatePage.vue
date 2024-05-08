@@ -158,6 +158,7 @@ import {
   maxLength,
   helpers,
 } from "boot/vuelidate";
+import { isAlpha } from "boot/validator";
 import { useGlobalStore } from "stores/global";
 
 defineOptions({
@@ -181,6 +182,10 @@ const optionsSex = ["Муж", "Жен"];
 const optionsAttribute = ["Сила", "Выносливость", "Ловкость", "Разум"];
 const optionsElement = ["Огонь", "Воздух", "Вода", "Земля"];
 
+const nameAlphaValidate = (value) => {
+  return isAlpha(value, "en-US") || isAlpha(value, "ru-RU");
+};
+
 const rules = computed(() => ({
   name: {
     required: helpers.withMessage("Необходимо заполнить поле. ", required),
@@ -193,6 +198,10 @@ const rules = computed(() => ({
       ({ $pending, $invalid, $params, $model }) =>
         `Длина имени не может быть более ${$params.max} символов. `,
       maxLength(20),
+    ),
+    nameAlphaValidate: helpers.withMessage(
+      "Имя персонажа может состоять только из букв русского или английского алфавита. ",
+      nameAlphaValidate,
     ),
   },
   sex: {
