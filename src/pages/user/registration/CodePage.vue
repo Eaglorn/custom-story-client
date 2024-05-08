@@ -68,6 +68,7 @@ const endRegistration = function () {
     url: storeGlobal.getAjaxUri("user/registration/check/code"),
     data: {
       email: storeUser.email,
+      password: storeUser.password,
       code: formCode.value,
     },
     timeout: storeGlobal.timeout.api.response,
