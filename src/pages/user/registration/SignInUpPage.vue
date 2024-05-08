@@ -260,7 +260,7 @@ const onAuth = function () {
       responseType: "json",
     })
       .then((response) => {
-        if (!response.data.registration) {
+        if (response.data.registration) {
           if (response.data.success) {
             storeUser.$patch({
               email: formData.value.email,
@@ -280,6 +280,17 @@ const onAuth = function () {
                 break;
               }
             }
+          } else if (!response.data.mail) {
+            Notify.create({
+              progress: true,
+              color: "warning",
+              position: "top",
+              message:
+                "Учётная запись с введёным почтовым ящиком не зарегистрирована.",
+              icon: "fa-solid fa-message-exclamation",
+              timeout: storeGlobal.timeout.api.error.low,
+              textColor: "black",
+            });
           } else if (!response.data.password) {
             Notify.create({
               progress: true,
