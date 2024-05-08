@@ -1,3 +1,3 @@
-import { isEmail } from "validator";
+import { isEmail, isAlpha, isAlphanumeric } from "validator";
 
-export { isEmail };
+export { isEmail, isAlpha, isAlphanumeric };

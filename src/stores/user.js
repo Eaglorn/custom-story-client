@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { SessionStorage, Loading, Notify } from "quasar";
+import { Cookies, Loading, Notify } from "quasar";
 import { api } from "boot/axios";
 import { useRouter } from "vue-router";
 import { useGlobalStore } from "./global";
@@ -15,14 +15,14 @@ export const useUserStore = defineStore("user", {
     onAuthorization() {
       const $router = useRouter();
       const storeGlobal = useGlobalStore();
-      if (SessionStorage.has("email") && SessionStorage.has("password")) {
+      if (Cookies.has("email") && Cookies.has("password")) {
         Loading.show();
         api({
           method: "post",
           url: storeGlobal.getAjaxUri("user/authorization"),
           data: {
-            email: SessionStorage.getItem("email"),
-            password: SessionStorage.getItem("password"),
+            email: Cookies.get("email"),
+            password: Cookies.get("password"),
           },
           timeout: storeGlobal.timeout.api.response,
           responseType: "json",
@@ -31,8 +31,8 @@ export const useUserStore = defineStore("user", {
             if (response.data.success) {
               if (response.data.registration) {
                 this.$patch({
-                  email: SessionStorage.getItem("email"),
-                  password: SessionStorage.getItem("password"),
+                  email: Cookies.get("email"),
+                  password: Cookies.get("password"),
                 });
                 switch (response.data.type) {
                   case "code_write": {
@@ -51,8 +51,8 @@ export const useUserStore = defineStore("user", {
               } else {
                 this.$patch({
                   auth: true,
-                  email: SessionStorage.getItem("email"),
-                  password: SessionStorage.getItem("password"),
+                  email: Cookies.get("email"),
+                  password: Cookies.get("password"),
                   type: response.data.type,
                 });
                 $router.push("UserProfile");
@@ -68,12 +68,12 @@ export const useUserStore = defineStore("user", {
               color: "negative",
               position: "top",
               message: "Нет соединения с сервером.",
-              icon: "fa-solid fa-circle-exclamation",
+              icon: "fa-solid fa-message-xmark",
               timeout: storeGlobal.timeout.api.error.high,
               textColor: "black",
             });
             Loading.hide();
-            if (storeGlobal.app.type == "dev") {
+            if (storeGlobal.app.environment == "development") {
               console.log(err);
             }
           });

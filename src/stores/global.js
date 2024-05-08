@@ -4,7 +4,12 @@ export const useGlobalStore = defineStore("global", {
   state: () => ({
     app: {
       version: "0.0.1",
-      type: "dev",
+      environment: "development",
+    },
+    setting: {
+      cookies: {
+        options: {},
+      },
     },
     server: {
       address: "https://customstory.online/",

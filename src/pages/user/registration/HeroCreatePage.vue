@@ -106,7 +106,7 @@
         <q-toolbar-title>
           <span class="text-weight-bold">Помощь по созданию персонажа</span>
         </q-toolbar-title>
-        <q-btn flat round dense icon="close" v-close-popup />
+        <q-btn flat round dense icon="fa-solid fa-circle-xmark" v-close-popup />
       </q-toolbar>
       <q-card-section class="dialog-body">
         <br />
@@ -239,7 +239,7 @@ const onCreate = function () {
       color: "warning",
       position: "top",
       message: "Неправильно заполнены поля в форме",
-      icon: "warning",
+      icon: "fa-solid fa-message-exclamation",
       timeout: storeGlobal.timeout.api.error.low,
       textColor: "black",
     });

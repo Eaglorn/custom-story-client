@@ -105,7 +105,7 @@ const createHero = function () {
           color: "negative",
           position: "top",
           message: "Ошибка. Попробуйте заного нажать кнопку.",
-          icon: "report_problem",
+          icon: "fa-solid fa-message-exclamation",
           timeout: storeGlobal.timeout.api.error.high,
         });
       }
@@ -116,10 +116,10 @@ const createHero = function () {
         color: "negative",
         position: "top",
         message: "Нет соединения с сервером. Попробуйте отправить код ещё раз",
-        icon: "report_problem",
+        icon: "fa-solid fa-message-xmark",
         timeout: storeGlobal.timeout.api.error.high,
       });
-      if (storeGlobal.app.type == "dev") {
+      if (storeGlobal.app.environment == "development") {
         console.log(err);
       }
       Loading.hide();

@@ -116,11 +116,11 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { Loading, Notify, SessionStorage } from "quasar";
+import { Loading, Notify, Cookies } from "quasar";
 import { api } from "boot/axios";
 import VueClientRecaptcha from "vue-client-recaptcha";
 import { useRouter } from "vue-router";
-import { isEmail } from "boot/validator";
+import { isEmail, isAlphanumeric } from "boot/validator";
 import {
   useVuelidate,
   required,
@@ -148,8 +148,17 @@ const recaptchaText = ref("");
 const recaptchaValue = ref("");
 const recaptchaResult = ref(false);
 
-const mailValidate = (value) => {
+const passwordValidate = (value) => {
+  return isAlphanumeric(value, "en-US") || isAlphanumeric(value, "ru-RU");
+};
+const mailCorrectValidate = (value) => {
   return isEmail(value);
+};
+const mailAlphaNumericValidate = (value) => {
+  return (
+    isAlphanumeric(value, "en-US", { ignore: "@." }) ||
+    isAlphanumeric(value, "ru-RU", { ignore: "@." })
+  );
 };
 const recaptchaValidate = (value) => {
   return value == recaptchaValue.value;
@@ -168,9 +177,13 @@ const rules = computed(() => ({
         `Электронный почтовый ящик не может превышать ${$params.max} символов. `,
       maxLength(40),
     ),
-    mailValidate: helpers.withMessage(
+    mailCorrectValidate: helpers.withMessage(
       "Не корректно ввведён электронный почтовый ящик. ",
-      mailValidate,
+      mailCorrectValidate,
+    ),
+    mailAlphaNumericValidate: helpers.withMessage(
+      "Электронный почтовый ящик может состоять только из букв и цифр. ",
+      mailAlphaNumericValidate,
     ),
   },
   password: {
@@ -184,6 +197,10 @@ const rules = computed(() => ({
       ({ $pending, $invalid, $params, $model }) =>
         `Пароль не может превышать ${$params.max} символов. `,
       maxLength(16),
+    ),
+    passwordValidate: helpers.withMessage(
+      "В пароле могут быть только буквы и цифры. ",
+      passwordValidate,
     ),
   },
   recaptcha: {
@@ -280,8 +297,16 @@ const onAuth = function () {
                 break;
               }
             }
-            SessionStorage.setItem("email", formData.value.email);
-            SessionStorage.setItem("password", formData.value.password);
+            Cookies.set(
+              "email",
+              formData.value.email,
+              storeGlobal.setting.cookies.options,
+            );
+            Cookies.set(
+              "password",
+              formData.value.password,
+              storeGlobal.setting.cookies.options,
+            );
           } else if (!response.data.mail) {
             Notify.create({
               progress: true,
@@ -309,8 +334,16 @@ const onAuth = function () {
             auth: true,
             type: response.data.type,
           });
-          SessionStorage.set("email", formData.value);
-          SessionStorage.set("password", formData.value);
+          Cookies.set(
+            "email",
+            formData.value.email,
+            storeGlobal.setting.cookies.options,
+          );
+          Cookies.set(
+            "password",
+            formData.value.password,
+            storeGlobal.setting.cookies.options,
+          );
           $router.push("UserProfile");
           storeUser.onSocket();
         } else if (!response.data.email) {
@@ -343,11 +376,11 @@ const onAuth = function () {
           position: "top",
           message:
             "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
-          icon: "fa-solid fa-circle-exclamation",
+          icon: "fa-solid fa-message-xmark",
           timeout: storeGlobal.timeout.api.error.high,
           textColor: "black",
         });
-        if (storeGlobal.app.type == "dev") {
+        if (storeGlobal.app.environment == "development") {
           console.log(err);
         }
         Loading.hide();
@@ -404,8 +437,16 @@ const onReg = function () {
               }
             }
           }
-          SessionStorage.setItem("email", formData.value.email);
-          SessionStorage.setItem("password", formData.value.password);
+          Cookies.set(
+            "email",
+            formData.value.email,
+            storeGlobal.setting.cookies.options,
+          );
+          Cookies.set(
+            "password",
+            formData.value.password,
+            storeGlobal.setting.cookies.options,
+          );
         } else if (response.data.registration) {
           if (!response.data.password) {
             Notify.create({
@@ -439,11 +480,11 @@ const onReg = function () {
           position: "top",
           message:
             "Нет соединения с сервером. Попробуйте выполнить регистрацию ещё раз",
-          icon: "fa-solid fa-circle-exclamation",
+          icon: "fa-solid fa-message-xmark",
           timeout: storeGlobal.timeout.api.error.high,
           textColor: "black",
         });
-        if (storeGlobal.app.type == "dev") {
+        if (storeGlobal.app.environment == "development") {
           console.log(err);
         }
         Loading.hide();
