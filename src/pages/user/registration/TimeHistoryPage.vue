@@ -49,7 +49,7 @@
               class="form-button shadow-2"
               style="width: 300px"
               color="primary"
-              label="Перейти к созданию персонажа..."
+              label="Перейти к созданию персонажа"
               @click="createHero"
             />
           </q-card-actions>

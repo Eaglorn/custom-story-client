@@ -75,7 +75,6 @@ const endRegistration = function () {
     responseType: "json",
   })
     .then((response) => {
-      Loading.hide();
       if (response.data.success === true) {
         $router.push("UserRegistrationTimeHistory");
       } else {
@@ -88,9 +87,9 @@ const endRegistration = function () {
           timeout: storeGlobal.timeout.api.error.high,
         });
       }
+      Loading.hide();
     })
     .catch(function () {
-      Loading.hide();
       Notify.create({
         color: "negative",
         position: "top",
@@ -98,6 +97,7 @@ const endRegistration = function () {
         icon: "report_problem",
         timeout: storeGlobal.timeout.api.error.high,
       });
+      Loading.hide();
     });
 };
 </script>

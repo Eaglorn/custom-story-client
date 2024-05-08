@@ -4,6 +4,7 @@ export const useGlobalStore = defineStore("global", {
   state: () => ({
     app: {
       version: "0.0.1",
+      type: "dev",
     },
     server: {
       address: "https://customstory.online/",

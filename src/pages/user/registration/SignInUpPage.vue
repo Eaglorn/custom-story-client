@@ -267,7 +267,7 @@ const onAuth = function () {
               password: formData.value.password,
             });
             switch (response.data.type) {
-              case "write_code": {
+              case "code_write": {
                 $router.push("UserRegistrationCode");
                 break;
               }
@@ -280,6 +280,8 @@ const onAuth = function () {
                 break;
               }
             }
+            SessionStorage.setItem("email", formData.value.email);
+            SessionStorage.setItem("password", formData.value.password);
           } else if (!response.data.mail) {
             Notify.create({
               progress: true,
@@ -310,6 +312,7 @@ const onAuth = function () {
           SessionStorage.set("email", formData.value);
           SessionStorage.set("password", formData.value);
           $router.push("UserProfile");
+          storeUser.onSocket();
         } else if (!response.data.email) {
           Notify.create({
             progress: true,
@@ -334,7 +337,7 @@ const onAuth = function () {
         }
         Loading.hide();
       })
-      .catch(function () {
+      .catch(function (err) {
         Notify.create({
           color: "negative",
           position: "top",
@@ -345,6 +348,9 @@ const onAuth = function () {
           textColor: "black",
         });
         Loading.hide();
+        if (storeGlobal.app.type == "dev") {
+          console.log(err);
+        }
       });
   }
 };
@@ -384,7 +390,7 @@ const onReg = function () {
             $router.push("UserRegistrationCode");
           } else {
             switch (response.data.type) {
-              case "write_code": {
+              case "code_write": {
                 $router.push("UserRegistrationCode");
                 break;
               }
@@ -398,6 +404,8 @@ const onReg = function () {
               }
             }
           }
+          SessionStorage.setItem("email", formData.value.email);
+          SessionStorage.setItem("password", formData.value.password);
         } else if (response.data.registration) {
           if (!response.data.password) {
             Notify.create({
@@ -425,7 +433,7 @@ const onReg = function () {
         }
         Loading.hide();
       })
-      .catch(function () {
+      .catch(function (err) {
         Notify.create({
           color: "negative",
           position: "top",
@@ -436,6 +444,9 @@ const onReg = function () {
           textColor: "black",
         });
         Loading.hide();
+        if (storeGlobal.app.type == "dev") {
+          console.log(err);
+        }
       });
   }
 };
