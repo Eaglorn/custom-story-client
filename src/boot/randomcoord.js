@@ -1,23 +1,23 @@
-const numberSymbols = 9;
-const numberGroup = 7;
+const numberSymbols = 9
+const numberGroup = 7
 
 const getRandomCoord = function () {
-  let result = "";
+  let result = ''
   const characters =
-    "ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯᚰᚱᚲᚳᚴᚵᚶᚷᚸᚹᚺᚻᚼᚽᚾᚿᛀᛁᛂᛃᛄᛅᛆᛇᛈᛉᛊᛋᛌᛍᛎᛏᛐᛑᛒᛓᛔᛕᛖᛗᛘᛙᛚᛛᛜᛝᛞᛟᛠᛡᛢᛣᛤᛥᛦᛧᛨᛩᛪ᛫᛬᛭ᛮᛯᛰabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*№?+";
-  const charactersLength = characters.length;
+    'ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯᚰᚱᚲᚳᚴᚵᚶᚷᚸᚹᚺᚻᚼᚽᚾᚿᛀᛁᛂᛃᛄᛅᛆᛇᛈᛉᛊᛋᛌᛍᛎᛏᛐᛑᛒᛓᛔᛕᛖᛗᛘᛙᛚᛛᛜᛝᛞᛟᛠᛡᛢᛣᛤᛥᛦᛧᛨᛩᛪ᛫᛬᛭ᛮᛯᛰabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*№?+'
+  const charactersLength = characters.length
   for (let i = 0; i < numberSymbols; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
-  return result;
-};
+  return result
+}
 
 const RandomCoord = function () {
-  let result = "";
+  let result = ''
   for (let i = 0; i < numberGroup; i++) {
-    result += getRandomCoord();
+    result += getRandomCoord()
   }
-  return result;
-};
+  return result
+}
 
-export { RandomCoord };
+export { RandomCoord }

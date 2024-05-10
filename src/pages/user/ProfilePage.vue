@@ -6,13 +6,13 @@
   </q-page>
 </template>
 
+<script setup>
+defineOptions({
+  name: 'UserProfilePage',
+})
+</script>
+
 <style scoped lang="sass">
 .page
   padding: 10px
 </style>
-
-<script setup>
-defineOptions({
-  name: "UserProfilePage",
-});
-</script>

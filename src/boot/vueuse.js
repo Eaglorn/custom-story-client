@@ -1,3 +1,3 @@
-import { useLocalStorage } from '@vueuse/core';
+import { useLocalStorage } from '@vueuse/core'
 
-export { useLocalStorage };
+export { useLocalStorage }

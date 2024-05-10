@@ -8,8 +8,7 @@
           class="online-badge"
           color="green"
           text-color="accent"
-          :label="'Онлайн: ' + playersCount"
-        />
+          :label="'Онлайн: ' + playersCount" />
       </q-toolbar>
     </q-header>
 
@@ -19,20 +18,20 @@
   </q-layout>
 </template>
 
+<script setup>
+import { computed } from 'vue'
+import { useGlobalStore } from 'stores/global'
+
+defineOptions({
+  name: 'MainLayout',
+})
+
+const storeGlobal = useGlobalStore()
+const playersCount = computed(() => storeGlobal.playersCount)
+const version = storeGlobal.app.version
+</script>
+
 <style scoped lang="sass">
 .online-badge
   font-size: 16px
 </style>
-
-<script setup>
-import { computed } from "vue";
-import { useGlobalStore } from "stores/global";
-
-defineOptions({
-  name: "MainLayout",
-});
-
-const storeGlobal = useGlobalStore();
-const playersCount = computed(() => storeGlobal.playersCount);
-const version = storeGlobal.app.version;
-</script>

@@ -15,19 +15,17 @@
         <q-card style="width: 100%; max-width: 350px">
           <q-card-section>
             <q-input
-              class="form-input"
               v-model="formCode"
+              class="form-input"
               type="text"
               outlined
-              label="Введите код полученный в сообщении"
-            />
+              label="Введите код полученный в сообщении" />
             <q-btn
               class="form-button shadow-2"
               style="width: 300px"
               color="primary"
               label="Завершить регистрацию"
-              @click="endRegistration"
-            />
+              @click="endRegistration" />
           </q-card-section>
         </q-card>
       </div>
@@ -35,71 +33,71 @@
   </q-page>
 </template>
 
-<style scoped lang="sass">
-.page
-  padding: 10px
-.my-fa-size
-  font-size: 20px
-</style>
-
 <script setup>
-import { ref } from "vue";
-import { Loading, Notify } from "quasar";
-import { api } from "boot/axios";
-import { useRouter } from "vue-router";
-import { useUserStore } from "stores/user";
-import { useGlobalStore } from "stores/global";
+import { ref } from 'vue'
+import { Loading, Notify } from 'quasar'
+import { api } from 'boot/axios'
+import { useRouter } from 'vue-router'
+import { useUserStore } from 'stores/user'
+import { useGlobalStore } from 'stores/global'
 
 defineOptions({
-  name: "UserRegistrationCodePage",
-});
+  name: 'UserRegistrationCodePage',
+})
 
-const $router = useRouter();
-const storeGlobal = useGlobalStore();
-const storeUser = useUserStore();
+const $router = useRouter()
+const storeGlobal = useGlobalStore()
+const storeUser = useUserStore()
 
-const formCode = ref("");
+const formCode = ref('')
 
 const endRegistration = function () {
-  Loading.show();
+  Loading.show()
   api({
-    method: "post",
-    url: storeGlobal.getAjaxUri("user/registration/check/code"),
+    method: 'post',
+    url: storeGlobal.getAjaxUri('user/registration/check/code'),
     data: {
       email: storeUser.email,
       password: storeUser.password,
       code: formCode.value,
     },
     timeout: storeGlobal.timeout.api.response,
-    responseType: "json",
+    responseType: 'json',
   })
     .then((response) => {
       if (response.data.success === true) {
-        $router.push("UserRegistrationTimeHistory");
+        $router.push('UserRegistrationTimeHistory')
       } else {
         Notify.create({
           progress: true,
-          color: "negative",
-          position: "top",
-          message: "Не верно введён код",
-          icon: "fa-solid fa-message-exclamation",
+          color: 'negative',
+          position: 'top',
+          message: 'Не верно введён код',
+          icon: 'fa-solid fa-message-exclamation',
           timeout: storeGlobal.timeout.api.error.high,
-        });
+        })
       }
-      Loading.hide();
+      Loading.hide()
     })
     .catch(function () {
       Notify.create({
-        color: "negative",
-        position: "top",
-        message: "Нет соединения с сервером. Попробуйте отправить код ещё раз",
-        icon: "fa-solid fa-message-xmark",
+        color: 'negative',
+        position: 'top',
+        message: 'Нет соединения с сервером. Попробуйте отправить код ещё раз',
+        icon: 'fa-solid fa-message-xmark',
         timeout: storeGlobal.timeout.api.error.high,
-      });
-      if (storeGlobal.app.environment == "development") {
-        console.log(err);
+      })
+      if (storeGlobal.app.environment == 'development') {
+        console.log(err)
       }
-      Loading.hide();
-    });
-};
+      Loading.hide()
+    })
+}
 </script>
+
+<style scoped lang="sass">
+.page
+  padding: 10px
+.my-fa-size
+  font-size: 20px
+</style>

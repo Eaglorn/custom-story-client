@@ -1,3 +1,3 @@
-import { clone as _clone, sort as _sort } from 'radash';
+import { clone as _clone, sort as _sort } from 'radash'
 
-export { _clone, _sort };
+export { _clone, _sort }

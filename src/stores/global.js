@@ -1,10 +1,10 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 
-export const useGlobalStore = defineStore("global", {
+export const useGlobalStore = defineStore('global', {
   state: () => ({
     app: {
-      version: "0.0.1",
-      environment: "development",
+      version: '0.0.1',
+      environment: 'development',
     },
     setting: {
       cookies: {
@@ -12,10 +12,10 @@ export const useGlobalStore = defineStore("global", {
       },
     },
     server: {
-      address: "https://customstory.online/",
+      address: 'https://customstory.online/',
     },
     api: {
-      address: "https://customstory.online/api/",
+      address: 'https://customstory.online/api/',
     },
     timeout: {
       api: {
@@ -34,7 +34,7 @@ export const useGlobalStore = defineStore("global", {
   }),
   actions: {
     getAjaxUri(data) {
-      return this.api.address + data;
+      return this.api.address + data
     },
   },
-});
+})

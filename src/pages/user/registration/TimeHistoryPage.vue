@@ -50,8 +50,7 @@
               style="width: 300px"
               color="primary"
               label="Перейти к созданию персонажа"
-              @click="createHero"
-            />
+              @click="createHero" />
           </q-card-actions>
         </q-card>
       </div>
@@ -59,70 +58,70 @@
   </q-page>
 </template>
 
-<style scoped lang="sass">
-.timeline
-  font-size: 18px
-</style>
-
 <script setup>
-import { ref } from "vue";
-import { api } from "boot/axios";
-import { useRouter } from "vue-router";
-import { useUserStore } from "stores/user";
-import { useGlobalStore } from "stores/global";
+import { ref } from 'vue'
+import { api } from 'boot/axios'
+import { useRouter } from 'vue-router'
+import { useUserStore } from 'stores/user'
+import { useGlobalStore } from 'stores/global'
 
 defineOptions({
-  name: "UserRegistrationTimeHistory",
-});
+  name: 'UserRegistrationTimeHistory',
+})
 
-const pageText = ref({});
+const pageText = ref({})
 
-import("./assets/TimeHistory.json").then((data) => {
-  pageText.value = data.default;
-});
+import('./assets/TimeHistory.json').then((data) => {
+  pageText.value = data.default
+})
 
-const $router = useRouter();
-const storeGlobal = useGlobalStore();
-const storeUser = useUserStore();
+const $router = useRouter()
+const storeGlobal = useGlobalStore()
+const storeUser = useUserStore()
 
 const createHero = function () {
   api({
-    method: "post",
-    url: storeGlobal.getAjaxUri("user/registration/history/read"),
+    method: 'post',
+    url: storeGlobal.getAjaxUri('user/registration/history/read'),
     data: {
       email: storeUser.email,
       password: storeUser.password,
     },
     timeout: storeGlobal.timeout.api.response,
-    responseType: "json",
+    responseType: 'json',
   })
     .then((response) => {
       if (response.data.success === true) {
-        $router.push("UserRegistrationHeroCreate");
+        $router.push('UserRegistrationHeroCreate')
       } else {
         Notify.create({
           progress: true,
-          color: "negative",
-          position: "top",
-          message: "Ошибка. Попробуйте заного нажать кнопку.",
-          icon: "fa-solid fa-message-exclamation",
+          color: 'negative',
+          position: 'top',
+          message: 'Ошибка. Попробуйте заного нажать кнопку.',
+          icon: 'fa-solid fa-message-exclamation',
           timeout: storeGlobal.timeout.api.error.high,
-        });
+        })
       }
-      Loading.hide();
+      Loading.hide()
     })
     .catch(function () {
       Notify.create({
-        color: "negative",
-        position: "top",
-        message: "Нет соединения с сервером. Попробуйте отправить код ещё раз",
-        icon: "fa-solid fa-message-xmark",
+        color: 'negative',
+        position: 'top',
+        message: 'Нет соединения с сервером. Попробуйте отправить код ещё раз',
+        icon: 'fa-solid fa-message-xmark',
         timeout: storeGlobal.timeout.api.error.high,
-      });
-      if (storeGlobal.app.environment == "development") {
-        console.log(err);
+      })
+      if (storeGlobal.app.environment == 'development') {
+        console.log(err)
       }
-      Loading.hide();
-    });
-};
+      Loading.hide()
+    })
+}
 </script>
+
+<style scoped lang="sass">
+.timeline
+  font-size: 18px
+</style>

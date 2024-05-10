@@ -1,5 +1,5 @@
-import axios from "axios";
+import axios from 'axios'
 
-const api = axios.create({ baseURL: "https://api.example.com" });
+const api = axios.create({ baseURL: 'https://api.example.com' })
 
-export { api };
+export { api }
