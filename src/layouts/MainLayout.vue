@@ -2,7 +2,9 @@
   <q-layout view="lHh lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-toolbar-title> CustomStory v{{ version }} </q-toolbar-title>
+        <q-toolbar-title class="allods">
+          CustomStory v{{ version }}
+        </q-toolbar-title>
         <q-space />
         <q-badge
           class="online-badge"

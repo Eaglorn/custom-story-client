@@ -1,8 +1,8 @@
-@import "fontawesome/css/all.css";
-@import "fontawesome/css/sharp-light.css";
-@import "fontawesome/css/sharp-regular.css";
-@import "fontawesome/css/sharp-solid.css";
-@import "fontawesome/css/sharp-thin.css";
+@import 'fontawesome/css/all.css';
+@import 'fontawesome/css/sharp-light.css';
+@import 'fontawesome/css/sharp-regular.css';
+@import 'fontawesome/css/sharp-solid.css';
+@import 'fontawesome/css/sharp-thin.css';
 
 @font-face {
   font-family: allods;
@@ -11,5 +11,8 @@
 
 body {
   background-color: rgb(107, 107, 107);
+}
+
+.allods {
   font-family: allods, Helvetica, Arial, Verdana, Tahoma, sans-serif;
 }

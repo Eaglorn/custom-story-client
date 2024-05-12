@@ -96,11 +96,13 @@
           <i class="fa-solid fa-person-rays fa-2x" />
         </q-avatar>
         <q-toolbar-title>
-          <span class="text-weight-bold">Помощь по созданию персонажа</span>
+          <span class="text-weight-bold allods">
+            Помощь по созданию персонажа
+          </span>
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="fa-solid fa-circle-xmark" />
       </q-toolbar>
-      <q-card-section class="dialog-body">
+      <q-card-section class="dialog-body allods">
         <br />
         <b>Сила</b> — это способность к физическим нагрузкам и нанесению урона в
         ближнем бою. <br /><br />
@@ -243,9 +245,13 @@ const onCreate = function () {
 
 <style scoped lang="sass">
 .form-input, .form-button
-  margin-top: 10px
-  margin-bottom: 10px
+  margin-top: 25px
+  margin-bottom: 25px
   width: 400px
+
+.form-button
+  margin-left: 15px
+  margin-right: 15px
 
 .dialog-body
   font-size: 20px

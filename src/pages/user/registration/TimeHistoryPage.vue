@@ -4,7 +4,7 @@
       <div class="q-gutter-md flex justify-center" style="width: 700px">
         <q-card>
           <q-card-section>
-            <q-timeline color="secondary" class="timeline" dark="true">
+            <q-timeline color="secondary" class="timeline allods" dark="true">
               <q-timeline-entry heading body="История мира" />
               <q-timeline-entry title="2026 февраль">
                 {{ pageText._2026_start }}
