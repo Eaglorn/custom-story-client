@@ -22,7 +22,7 @@
     "decimal.js": "^10.4.3",
     "luxon": "^3.4.4",
     "pinia": "^2.1.7",
-    "quasar": "^2.16.2",
+    "quasar": "^2.16.4",
     "radash": "^12.1.0",
     "socket.io-client": "4.7.5",
     "validator": "^13.12.0",
