@@ -33,3 +33,5 @@ yarn-error.log*
 .env.local*
 
 yarn.lock
+
+git-sizer.exe
