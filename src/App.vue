@@ -48,6 +48,7 @@ if (storeGlobal.app.environment == 'production') {
 
 storeUser.onAuthorization()
 
+//$router.push("UserRegistrationCode");
 //$router.push("UserRegistrationTimeHistory");
 //$router.push("UserRegistrationHeroCreate");
 //$router.push("UserSignInUp");
