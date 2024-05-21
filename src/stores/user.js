@@ -90,6 +90,7 @@ export const useUserStore = defineStore('user', {
       try {
         const storeGlobal = useGlobalStore()
         const socket = io(storeGlobal.server.address, {
+          transports: ['websocket'],
           query: {
             email: this.email,
             password: this.password,
