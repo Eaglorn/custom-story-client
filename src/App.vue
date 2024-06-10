@@ -17,7 +17,7 @@ Loading.setDefaults({
   backgroundColor: 'brown-7',
 })
 
-Loading.show()
+//Loading.show()
 
 defineOptions({
   name: 'App',
@@ -51,7 +51,7 @@ storeUser.onAuthorization()
 storeUser.onSocket()
 
 //$router.push("UserRegistrationCode");
-//$router.push("UserRegistrationTimeHistory");
+//$router.push('UserRegistrationTimeHistory')
 //$router.push("UserRegistrationHeroCreate");
 //$router.push("UserSignInUp");
 

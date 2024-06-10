@@ -5,42 +5,12 @@
         <q-card>
           <q-card-section>
             <q-timeline color="secondary" class="timeline allods" dark="true">
-              <q-timeline-entry heading body="История мира" />
-              <q-timeline-entry title="2026 февраль">
-                {{ pageText._2026_start }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2026 июнь">
-                {{ pageText._2026_middle }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2026 декабрь">
-                {{ pageText._2026_end }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2027 май">
-                {{ pageText._2027_middle }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2028 март">
-                {{ pageText._2028 }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2030 май">
-                {{ pageText._2030 }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2031 январь">
-                {{ pageText._2031_start }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2031 ноябрь">
-                {{ pageText._2031_end }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2036 август">
-                {{ pageText._2036 }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2042 январь">
-                {{ pageText._2042 }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2047 ноябрь">
-                {{ pageText._2047 }}
-              </q-timeline-entry>
-              <q-timeline-entry title="2055 май">
-                {{ pageText._2055 }}
+              <q-timeline-entry heading body="Посмертие" />
+              <q-timeline-entry
+                v-for="item in pageText.data"
+                :key="item.name"
+                :title="item.name">
+                {{ item.text }}
               </q-timeline-entry>
             </q-timeline>
           </q-card-section>
