@@ -5,7 +5,7 @@
         <q-card>
           <q-card-section>
             <q-timeline color="secondary" class="timeline allods" dark="true">
-              <q-timeline-entry heading body="Посмертие" />
+              <q-timeline-entry heading body="Начало после конца" />
               <q-timeline-entry
                 v-for="item in pageText.data"
                 :key="item.name"
