@@ -27,8 +27,8 @@
     "socket.io-client": "4.7.5",
     "validator": "^13.12.0",
     "vue": "^3.4.27",
-    "vue-client-recaptcha": "^1.1.5",
-    "vue-router": "^4.3.2"
+    "vue-client-recaptcha": "^1.1.6",
+    "vue-router": "^4.3.3"
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.9.3",
