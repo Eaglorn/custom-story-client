@@ -31,6 +31,7 @@
 <script setup>
 import { ref } from 'vue'
 import { api } from 'boot/axios'
+import { Loading, Notify } from 'quasar'
 import { useRouter } from 'vue-router'
 import { useUserStore } from 'stores/user'
 import { useGlobalStore } from 'stores/global'
